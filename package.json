@@ -1,0 +1,26 @@
+{
+  "name": "domino-effect",
+  "version": "0.0.1",
+  "description": "Reactive state management framework",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/42shadow42/domino-effect.git"
+  },
+  "keywords": [
+    "state",
+    "reactive"
+  ],
+  "author": "42shadow42",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/42shadow42/domino-effect/issues"
+  },
+  "homepage": "https://github.com/42shadow42/domino-effect#readme",
+  "dependencies": {
+    "typescript": "^4.9.5"
+  }
+}
