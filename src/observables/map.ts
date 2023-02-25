@@ -43,6 +43,10 @@ export class ObservableMap<TKey, TValue> {
     }
 
     set(key: TKey, value: TValue) {
+        if (this._map.get(key) === value) {
+            return
+        }
+        
         this._map.set(key, value)
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('add', [[key, value]])

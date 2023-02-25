@@ -18,6 +18,10 @@ export class ObservableValue<TValue> {
 
     get = () => this._value
     set = (value: TValue) => {
+        if (this._value === value) {
+            return
+        }
+        
         this._value = value
         new Set(this._subscribers).forEach((subscriber) => subscriber(value))
     }

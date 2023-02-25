@@ -42,6 +42,10 @@ export class ObservableSet<TValue> {
     }
 
     add = (value: TValue) => {
+        if (this._set.has(value)) {
+            return
+        }
+        
         this._set.add(value)
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('add', [value])
