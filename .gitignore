@@ -1,3 +1,6 @@
 node_modules
+lib
+.eslintcache
+domino-effect-*.tgz
 coverage
 .vscode

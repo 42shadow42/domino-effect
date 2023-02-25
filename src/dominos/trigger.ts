@@ -1,6 +1,9 @@
 import { ObservableValue, ObservableValueSubscriber } from "../observables"
 import { Store } from "../store"
 
+export type DominoType = 'standard' | 'trigger'
+export type DominoMetadata = { type: DominoType }
+
 export type GetDominoValue<TValue> = () => TValue
 export type SetDominoValue<TValue> = (value: TValue) => void
 export type DeleteDominoValue = () => void
@@ -19,8 +22,10 @@ export type TriggerDominoUtils<TValue> = DominoUtils<TValue> & {
     set: SetDominoValue<TValue>
 }
 
-export type CoreDomino<TValue> = (store: Store) => DominoUtils<TValue>
-export type TriggerDomino<TValue> = (store: Store) => TriggerDominoUtils<TValue>
+export type CoreDomino<TValue> = ((store: Store) => DominoUtils<TValue>) & DominoMetadata
+export type TriggerDomino<TValue> = ((store: Store) => TriggerDominoUtils<TValue>) & DominoMetadata
+
+export const isTriggerDomino = <TValue>(domino: CoreDomino<TValue> | TriggerDomino<TValue>): domino is TriggerDomino<TValue> => domino.type === 'trigger'
 
 export type CoreDominoSettings = {
     debugLabel?: string
@@ -32,8 +37,9 @@ export const trigger = <TValue>(value: TValue, settings: CoreDominoSettings = {}
     const { debugLabel } = settings
 
     const cache = new Map<Store, TriggerDominoUtils<TValue>>()
+    const metadata: DominoMetadata = { type: 'trigger' }
 
-    return (store: Store) => {
+    return Object.assign((store: Store) => {
         if (cache.has(store)) {
             return cache.get(store)!
         }
@@ -73,6 +79,7 @@ export const trigger = <TValue>(value: TValue, settings: CoreDominoSettings = {}
             debugLabel,
         })
 
+
         return cache.get(store)!
-    }
+    }, metadata)
 }

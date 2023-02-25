@@ -1,6 +1,6 @@
 import { ObservableValue, ObservableValueSubscriber } from "../observables"
 import { Store } from "../store"
-import { CoreDomino, DominoUtils, TriggerDomino } from "./trigger"
+import { CoreDomino, DominoMetadata, DominoUtils, TriggerDomino } from "./trigger"
 
 export type DominoEffectUtils = {
     get: <TValue>(trigger: TriggerDomino<TValue>) => TValue
@@ -16,10 +16,11 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
     const handle = Symbol()
 
     const { debugLabel } = settings
+    const metadata: DominoMetadata = { type: 'standard' }
 
     const cache = new Map<Store, DominoUtils<TValue>>()
 
-    return (store: Store) => {
+    return Object.assign((store: Store) => {
         if (cache.has(store)) {
             return cache.get(store)!
         }
@@ -76,5 +77,5 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
         })
         
         return cache.get(store)!
-    }
+    }, metadata)
 }
