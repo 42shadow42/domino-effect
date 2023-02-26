@@ -18,6 +18,18 @@ describe('domino', () => {
         expect(sut(store).get()).toBe('test')
     })
 
+    it('should allow manage', () => {
+        const store = new Store()
+        const root = trigger('test')
+        const sut = domino(({ manage }) => {
+            return manage(root)
+        })
+
+        expect(sut(store).get().value).toBe('test')
+        sut(store).get().set('test2')
+        expect(sut(store).get().value).toBe('test2')
+    })
+
     it('should domino effect', () => {
         const store = new Store()
         

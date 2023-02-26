@@ -32,6 +32,8 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
             },
             manage: <TValue>(trigger: TriggerDomino<TValue>) => {
                 const handle = trigger(store)
+                _dependencies.add(trigger)
+                handle.subscribe(subscription)
                 return {
                     value: handle.get(),
                     set: handle.set
