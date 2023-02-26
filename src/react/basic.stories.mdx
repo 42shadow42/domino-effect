@@ -1,0 +1,27 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import * as stories from './basic.stories.tsx';
+import { Component } from 'react';
+
+<Meta title="Domino/BasicRules" component={Component} />
+
+# Basic dominos
+
+### Basic rules of dominos
+
+### Trigger
+Triggers are the basic form of dominos they are read and write enabled. 
+When changed they will trigger a domino effect and will cascade changes to dependent domnions.
+
+<Story story={stories.Trigger} />
+
+### Domino
+Dominos are derived from triggers, they exhibit the domino effect and will cascade changes to dependent dominos.
+
+<Story story={stories.Domino} />
+
+### One domino per component
+Only one domino can be used per component, if you need more than one, consider splitting the component. 
+This is in order to support asynchronous behaviors, for more information see Async Dominos
+
+<Story story={stories.OneDominoPerComponent} />
+
