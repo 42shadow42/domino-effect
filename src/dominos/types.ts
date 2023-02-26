@@ -32,7 +32,8 @@ export type CoreDominoSettings = {
 }
 
 export type DominoEffectUtils = {
-    get: <TValue>(trigger: TriggerDomino<TValue>) => TValue
+    get: <TValue>(source: CoreDomino<TValue>) => TValue
+    manage: <TValue>(trigger: TriggerDomino<TValue>) => { value: TValue, set: SetDominoValue<TValue>}
 }
 
 export type DominoEffectCalculation<TValue> = (utils: DominoEffectUtils) => TValue

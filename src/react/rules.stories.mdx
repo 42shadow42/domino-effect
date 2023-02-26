@@ -6,20 +6,26 @@ import { Component } from 'react';
 
 # Rules of dominos
 
-### Trigger
+## Trigger
 Triggers are the basic form of dominos they are read and write enabled. 
 When changed they will trigger a domino effect and will cascade changes to dependent domnions.
 
 <Story story={stories.Trigger} />
 
-### Domino
+## Domino
 Dominos are derived from triggers, they exhibit the domino effect and will cascade changes to dependent dominos.
 
 <Story story={stories.Domino} />
 
-### One domino per component
-Only one domino can be used per component, if you need more than one, consider splitting the component. 
-This is in order to support asynchronous behaviors, for more information see Async Dominos
+## One domino per component
+In order to support asynchronous behaviors within the react rules of hooks, only one domino can be used per component.
+If you need more than one, consider splitting the component or combining dominos.
 
-<Story story={stories.OneDominoPerComponent} />
+### Splitting Components
+
+<Story story={stories.SplittingComponents} />
+
+### Combining Dominos
+
+<Story story={stories.CombiningDominos} />
 

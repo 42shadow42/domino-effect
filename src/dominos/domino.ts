@@ -24,11 +24,18 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
         }
 
         const utils = {
-            get: <TValue>(trigger: CoreDomino<TValue>) => {
-                const domino = trigger(store)
-                _dependencies.add(trigger)
+            get: <TValue>(source: CoreDomino<TValue>) => {
+                const domino = source(store)
+                _dependencies.add(source)
                 domino.subscribe(subscription)
                 return domino.get()
+            },
+            manage: <TValue>(trigger: TriggerDomino<TValue>) => {
+                const handle = trigger(store)
+                return {
+                    value: handle.get(),
+                    set: handle.set
+                }
             }
         }
 
