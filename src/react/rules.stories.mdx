@@ -35,7 +35,8 @@ To resolve rendering problems you can split using basic dominos and memoize comp
 
 <Story story={stories.SplittingDominos} />
 
-This works with async dominos too!
+This works with async dominos too! 
+Just keep in mind async operations will still be performed if they depend directly on changed values.
 
 <Story story={stories.SplittingAsyncDominos} />
 

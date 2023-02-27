@@ -171,12 +171,28 @@ export const SplittingAsyncDominos: ComponentStory<typeof Component> = () => {
 		}
 	})
 
+	const splitGreeting = domino(async ({ get }) => {
+		const value = await get(core)
+		action('split greeting evaulated')(value.greeting)
+		return value.greeting
+	})
+
+	const splitTarget = domino(async ({ get }) => {
+		const value = await get(core)
+		action('split target evaulated')(value.target)
+		return value.target
+	})
+
 	const greeting = domino(async ({ get }) => {
-		return (await get(core)).greeting
+		const value = await get(splitGreeting)
+		action('greeting evaulated')(value)
+		return value
 	})
 
 	const target = domino(async ({ get }) => {
-		return (await get(core)).target
+		const value = await get(splitTarget)
+		action('target evaulated')(value)
+		return value
 	})
 
 	const GreetingDisplay = () => {
@@ -230,6 +246,7 @@ export const SplittingAsyncDominos: ComponentStory<typeof Component> = () => {
 					<DominoSuspense fallback="loading">
 						{GreetingDisplay}
 					</DominoSuspense>
+					{' '}
 					<DominoSuspense fallback="loading">
 						{TargetDisplay}
 					</DominoSuspense>
