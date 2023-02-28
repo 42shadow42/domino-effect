@@ -102,3 +102,18 @@ Caching.parameters = {
 		},
 	},
 }
+
+import { CustomStoresExample as CustomStoresComponent } from './CustomStores'
+// @ts-ignore
+import CustomStoresSource from '!!raw-loader!./CustomStores'
+
+export const CustomStores = CustomStoresComponent.bind({})
+// @ts-ignore
+CustomStores.parameters = {
+	docs: {
+		source: {
+			code: CustomStoresSource,
+			language: 'tsx',
+		},
+	},
+}

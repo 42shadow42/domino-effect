@@ -1,5 +1,5 @@
 import isPromise from 'is-promise'
-import { isEqual } from 'lodash'
+import isEqual from 'lodash.isequal'
 
 export type ObservableValueSubscriber<TValue> = (value: TValue) => void
 

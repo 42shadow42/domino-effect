@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import { trigger, domino, useDomino } from '@42shadow42/domino-effect'
 
 const core = trigger('Hello')

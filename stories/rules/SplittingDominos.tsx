@@ -1,4 +1,3 @@
-import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { Fragment, memo } from 'react'
 import { domino, trigger, useDomino } from '@42shadow42/domino-effect'

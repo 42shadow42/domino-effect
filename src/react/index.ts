@@ -1,4 +1,3 @@
-export { DominoContext } from './context'
 export { useDomino } from './useDomino'
 export { useAsyncDomino } from './useAsyncDomino'
 export { DominoSuspense } from './suspense'

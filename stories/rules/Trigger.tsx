@@ -1,4 +1,3 @@
-import React from 'react'
 import { trigger, useDomino } from '@42shadow42/domino-effect'
 
 const core = trigger('Hello')
