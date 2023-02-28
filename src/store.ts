@@ -7,8 +7,13 @@ export const GLOBAL_STORE = new Store()
 
 STORES.set(Symbol("Global"), GLOBAL_STORE)
 
-export const createStore = (name: string) => {
+export const createStore = (name: string): [Store, symbol] => {
     const store = new Store()
-    STORES.set(Symbol(name), store)
-    return store
+    const symbol = Symbol(name)
+    STORES.set(symbol, store)
+    return [store, symbol]
+}
+
+export const deleteStore = (handle: symbol) => {
+    return STORES.delete(handle)
 }

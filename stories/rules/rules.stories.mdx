@@ -70,6 +70,7 @@ Just keep in mind to expire data, that may get stale.
 
 You can use custom stores to access multiple instances of your dominos.
 You can pass the stores via context to prevent prop drilling.
+To create a store local to your components use useLocalStore, to avoid memory leaks.
 
 <Canvas>
     <Story story={stories.CustomStores} />
