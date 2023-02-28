@@ -2,6 +2,8 @@ import { Store } from "../store"
 import { domino } from "./domino"
 import { trigger } from "./trigger"
 
+jest.useFakeTimers()
+
 describe('domino', () => {
     afterEach(() => {
         jest.clearAllMocks()
@@ -28,6 +30,104 @@ describe('domino', () => {
         expect(sut(store).get().value).toBe('test')
         sut(store).get().set('test2')
         expect(sut(store).get().value).toBe('test2')
+    })
+
+    // Note: This test case is contrived for testing purposes.
+    // However, it is a black box way of validating cache functionality.
+    it('should allow caching', () => {
+        const store = new Store()
+
+        const root = trigger('test')
+        const sut = domino(({ get, cache }) => {
+            if (cache.get(root)) {
+                return cache.get(root)
+            }
+            const value = get(root)
+            cache.set(root, value)
+            return value
+        })
+
+        expect(sut(store).get()).toBe('test')
+
+        root(store).set('test2')
+
+        // Validate the cache is used over the value
+        expect(sut(store).get()).toBe('test')
+    })
+
+    // Note: This test case is contrived for testing purposes.
+    // However, it is a black box way of validating cache functionality.
+    it('should allow caching up to ttl', () => {
+        const store = new Store()
+
+        const root = trigger('test')
+        const sut = domino(({ get, cache }) => {
+            if (cache.get(root)) {
+                return cache.get(root)
+            }
+            const value = get(root)
+            cache.set(root, value)
+            return value
+        }, { ttl: 1000 })
+
+        expect(sut(store).get()).toBe('test')
+        root(store).set('test2')
+
+        jest.advanceTimersByTime(999)
+        
+        // Validate the cache is cleared and the value is refreshed
+        expect(sut(store).get()).toBe('test')
+    })
+
+    // Note: This test case is contrived for testing purposes.
+    // However, it is a black box way of validating cache functionality.
+    it('should allow caching up to ttl', () => {
+        const store = new Store()
+
+        const root = trigger('test')
+        const sut = domino(({ get, cache }) => {
+            if (cache.get(root)) {
+                return cache.get(root)
+            }
+            const value = get(root)
+            cache.set(root, value)
+            return value
+        }, { ttl: 1000 })
+
+        expect(sut(store).get()).toBe('test')
+        root(store).set('test2')
+
+        jest.advanceTimersByTime(1000)
+        
+        // Validate the cache is cleared and the value is refreshed
+        expect(sut(store).get()).toBe('test2')
+    })
+
+    it('should recalculate on cache-expiry', () => {
+        const store = new Store()
+
+        const root = trigger('test')
+        const calculation = jest.fn(({ get, cache }) => {
+            if (cache.get(root)) {
+                return cache.get(root)
+            }
+            const value = get(root)
+            cache.set(root, value)
+            return value
+        })
+        const sut = domino(calculation, { ttl: 1000 })
+
+        sut(store).get()
+        
+        expect(calculation).toBeCalledTimes(1)
+
+        jest.advanceTimersByTime(999)
+
+        expect(calculation).toBeCalledTimes(1)
+
+        jest.advanceTimersByTime(1)
+
+        expect(calculation).toBeCalledTimes(2)
     })
 
     it('should domino effect', () => {

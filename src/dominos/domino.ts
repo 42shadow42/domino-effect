@@ -1,4 +1,4 @@
-import { ObservableValue, ObservableValueSubscriber } from "../observables"
+import { ObservableCache, ObservableValue, ObservableValueSubscriber } from "../observables"
 import { Store } from "../store"
 import { CoreDomino, DominoEffectCalculation, DominoEffectSettings, DominoMetadata, DominoUtils, TriggerDomino } from "./types"
 
@@ -8,19 +8,25 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
     const { debugLabel } = settings
     const metadata: DominoMetadata = { type: 'standard' }
 
-    const cache = new Map<Store, DominoUtils<TValue>>()
+    const dominoCache = new Map<Store, DominoUtils<TValue>>()
 
     return Object.assign((store: Store) => {
-        if (cache.has(store)) {
-            return cache.get(store)!
+        if (dominoCache.has(store)) {
+            return dominoCache.get(store)!
         }
+
+        const cache = new ObservableCache<any, any>(settings.ttl || 0)
 
         let _dependencies = new Set<CoreDomino<any>>()
 
         const subscription = () => {
             new Set(_dependencies).forEach((dependency) => dependency(store).unsubscribe(subscription))
             _dependencies = new Set<TriggerDomino<any>>()
+            // Users may interact with the cache during calculation so...
+            // Don't listen to subscriptions during calculation.
+            cache.unsubscribe(subscription)
             store.get(handle)?.set(calculation(utils))
+            cache.subscribe(subscription)
         }
 
         const utils = {
@@ -38,13 +44,15 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
                     value: handle.get(),
                     set: handle.set
                 }
-            }
+            },
+            cache,
         }
 
-        cache.set(store, {
+        dominoCache.set(store, {
             subscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
                 if (!store.has(handle)) {
                     store.set(handle, new ObservableValue(calculation(utils)))
+                    cache.subscribe(subscription)
                 }
                 store.get(handle)!.subscribe(subscriber)
             },
@@ -57,19 +65,20 @@ export const domino = <TValue>(calculation: DominoEffectCalculation<TValue>, set
             get: () => {
                 if (!store.has(handle)) {
                     store.set(handle, new ObservableValue(calculation(utils)))
+                    cache.subscribe(subscription)
                 }
                 // private handle ensures the type will always be of TValue
                 return store.get(handle)!.get()
             },
             delete: () => {
                 new Set(_dependencies).forEach((dependency) => dependency(store).unsubscribe(subscription))
-                _dependencies = new Set<TriggerDomino<any>>()
-                cache.delete(store)
+                cache.unsubscribe(subscription)
+                dominoCache.delete(store)
                 return store.delete(handle)
             },
             debugLabel,
         })
         
-        return cache.get(store)!
+        return dominoCache.get(store)!
     }, metadata)
 }

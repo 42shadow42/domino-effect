@@ -1,3 +1,5 @@
+export { ObservableCache } from './cache'
+
 export type { ObservableMapAction, ObservableMapActionData, ObservableMapIterationCallback, ObservableMapSubscriber } from './map'
 export { ObservableMap } from './map'
 

@@ -87,3 +87,18 @@ SplittingAsyncDominos.parameters = {
 		},
 	},
 }
+
+import { Caching as CachingComponent } from './Caching'
+// @ts-ignore
+import CachingSource from '!!raw-loader!./Caching'
+
+export const Caching = CachingComponent.bind({})
+// @ts-ignore
+Caching.parameters = {
+	docs: {
+		source: {
+			code: CachingSource,
+			language: 'tsx',
+		},
+	},
+}

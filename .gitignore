@@ -1,6 +1,7 @@
-node_modules
-lib
-.eslintcache
-domino-effect-*.tgz
-coverage
 .vscode
+coverage
+lib
+node_modules
+.DS_Store
+.eslintcache
+42shadow42-domino-effect-*.tgz
