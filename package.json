@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/42shadow42/domino-effect/issues"
   },
-  "homepage": "https://github.com/42shadow42/domino-effect#readme",
+  "homepage": "https://42shadow42.github.io/domino-effect/",
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
