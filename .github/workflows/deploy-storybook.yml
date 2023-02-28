@@ -11,6 +11,8 @@ jobs:
       url: ${{ steps.build-publish.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+    - id: checkout
+      uses: actions/checkout@main
     - id: install-node
       shell: bash -l {0} 
       run: nvm install
