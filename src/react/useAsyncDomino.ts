@@ -5,11 +5,11 @@ import { GLOBAL_STORE, Store } from '..'
 
 export function useAsyncDomino<TValue>(
 	domino: TriggerDomino<Promise<TValue>>,
-	store: Store,
+	store?: Store,
 ): [TValue, SetDominoValue<Promise<TValue>>]
 export function useAsyncDomino<TValue>(
 	domino: CoreDomino<Promise<TValue>>,
-	store: Store,
+	store?: Store,
 ): TValue
 export function useAsyncDomino<TValue>(
 	domino: CoreDomino<Promise<TValue>> | TriggerDomino<Promise<TValue>>,
