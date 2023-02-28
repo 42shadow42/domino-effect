@@ -9,8 +9,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.build-publish.outputs.page_url }}
-    runs-on: 16-alpine3.16
+    runs-on: ubuntu-latest
     steps:
+    - id: install node
+      shell: bash -l {0} 
+      run: nvm install
     - id: build-publish
       uses: bitovi/github-actions-react-to-ghp@v1.2.0
       with:
