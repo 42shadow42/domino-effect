@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -19,7 +19,11 @@
     "outDir": "./lib",
     "declarationDir": "./lib",
     "downlevelIteration": true,
+    "composite": true,
+    "paths": {
+      "@42shadow42/domino-effect": ["src"],
+    },
   },
-  "include": ["**/*"],
-  "exclude": ["node_modules", "lib"]
+  "include": ["src/**/*", "stories/**/*"],
+  "exclude": ["node_modules", "lib"],
 }

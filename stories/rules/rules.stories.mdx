@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { Meta, Story, Source, Canvas } from '@storybook/addon-docs';
 import * as stories from './rules.stories.tsx';
 import { Component } from 'react';
 
@@ -10,12 +10,17 @@ import { Component } from 'react';
 Triggers are the basic form of dominos they are read and write enabled. 
 When changed they will trigger a domino effect and will cascade changes to dependent domnions.
 
-<Story story={stories.Trigger} />
+<Canvas>
+    <Story story={stories.Trigger} />
+</Canvas>
 
 ## Domino
 Dominos are derived from triggers, they exhibit the domino effect and will cascade changes to dependent dominos.
 
-<Story story={stories.Domino} />
+<Canvas>
+    <Story story={stories.Domino} />
+</Canvas>
+
 
 ## One domino per component
 In order to support asynchronous behaviors within the react rules of hooks, only one domino can be used per component.
@@ -23,20 +28,32 @@ If you need more than one, consider splitting the component or combining dominos
 
 ### Splitting Components
 
-<Story story={stories.SplittingComponents} />
+<Canvas>
+    <Story story={stories.SplittingComponents} />
+</Canvas>
 
 ### Combining Dominos
 
-<Story story={stories.CombiningDominos} />
+<Canvas>
+    <Story story={stories.CombiningDominos} />
+</Canvas>
 
 ## Select only what you need
 When dealing with complex objects dominos can cause excessive rendering. 
 To resolve rendering problems you can split using basic dominos and memoize components.
 
-<Story story={stories.SplittingDominos} />
+### Splitting Dominos
+
+<Canvas>
+    <Story story={stories.SplittingDominos} />
+</Canvas>
 
 This works with async dominos too! 
 Just keep in mind async operations will still be performed if they depend directly on changed values.
 
-<Story story={stories.SplittingAsyncDominos} />
+### Splitting Async Dominos
+
+<Canvas>
+    <Story story={stories.SplittingAsyncDominos} />
+</Canvas>
 

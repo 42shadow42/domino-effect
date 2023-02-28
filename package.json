@@ -1,10 +1,10 @@
 {
-  "name": "domino-effect",
+  "name": "@42shadow42/domino-effect",
   "version": "0.0.1",
   "description": "Reactive state management framework",
   "main": "lib/cjs/index.js",
   "module": "lib/es/index.js",
-  "typings": "lib/src/index.d.ts",
+  "typings": "src/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "test": "jest",
