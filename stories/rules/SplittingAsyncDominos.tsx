@@ -91,14 +91,14 @@ export const SplittingAsyncDominos = () => {
 	return (
 		<Fragment>
 			<h4>
-				<DominoSuspense fallback="loading">
+				<DominoSuspense fallback="loading" props={{}}>
 					{GreetingDisplay}
 				</DominoSuspense>{' '}
-				<DominoSuspense fallback="loading">
+				<DominoSuspense fallback="loading" props={{}}>
 					{TargetDisplay}
 				</DominoSuspense>
 			</h4>
-			<DominoSuspense fallback="loading">{Editor}</DominoSuspense>
+			<DominoSuspense fallback="loading" props={{}}>{Editor}</DominoSuspense>
 		</Fragment>
 	)
 }
