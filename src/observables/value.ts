@@ -14,10 +14,12 @@ export class ObservableValue<TValue> {
 
     subscribe = (subscriber: ObservableValueSubscriber<TValue>) => {
         this._subscribers.add(subscriber)
+        return this._subscribers.size
     }
 
     unsubscribe = (subscriber: ObservableValueSubscriber<TValue>) => {
         this._subscribers.delete(subscriber)
+        return this._subscribers.size
     }
 
     get = () => this._value

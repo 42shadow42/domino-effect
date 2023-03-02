@@ -47,6 +47,7 @@ export const isTriggerDomino = <TValue, TContext>(
 
 export type CoreDominoSettings = {
 	debugLabel?: string
+	ttl?: number
 }
 
 export type DominoEffectUtils<TContext> = {

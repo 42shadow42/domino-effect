@@ -11,8 +11,6 @@ import {
 	DominoSuspense,
 	useAsyncDomino,
 	useDomino,
-	TriggerDomino,
-	useLocalStore,
 } from '@42shadow42/domino-effect'
 
 type User = {

@@ -1,5 +1,4 @@
 import { Map } from 'immutable'
-
 export type ObservableMapAction = 'add' | 'remove'
 export type ObservableMapActionData<TKey, TValue> = [TKey, TValue][]
 export type ObservableMapSubscriber<TKey, TValue> = (

@@ -14,7 +14,7 @@ export const trigger = <TValue, TContext = undefined>(
 ): TriggerDomino<TValue, TContext> => {
 	const handle = Symbol()
 
-	const { debugLabel } = settings
+	const { debugLabel, ttl } = settings
 
 	let cache = Map<
 		List<Store | TContext | undefined>, TriggerDominoUtils<TValue, TContext>>()
@@ -27,6 +27,7 @@ export const trigger = <TValue, TContext = undefined>(
 		}
         const storeKey = List([handle, context])
 
+        let gcTimeout: NodeJS.Timeout
         const utils: TriggerDominoUtils<TValue, TContext> = Object.assign({
             get: () => {
                 if (!store.has(storeKey)) {
@@ -47,12 +48,18 @@ export const trigger = <TValue, TContext = undefined>(
                     store.set(storeKey, new ObservableValue(factory(context)))
                 }
                 store.get(storeKey)!.subscribe(subscriber)
+                clearTimeout(gcTimeout)
             },
             unsubscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
                 if (!store.has(storeKey)) {
                     return
                 }
-                store.get(storeKey)!.unsubscribe(subscriber)
+                const count = store.get(storeKey)!.unsubscribe(subscriber)
+                if (count === 0 && ttl !== undefined) {
+                    gcTimeout = setTimeout(() => {
+                        utils.delete()
+                    }, ttl)
+                }
             },
             delete: () => {
                 const newCache = cache.delete(cacheKey)

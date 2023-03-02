@@ -20,7 +20,7 @@ export const domino = <TValue, TContext>(
 ): CoreDomino<TValue, TContext> => {
 	const handle = Symbol()
 
-	const { debugLabel } = settings
+	const { debugLabel, ttl } = settings
 	const metadata: DominoMetadata = { type: 'standard' }
 
 	let utilCache =
@@ -74,6 +74,7 @@ export const domino = <TValue, TContext>(
 			cache,
 		}
 
+		let gcTimeout: NodeJS.Timeout
 		const dominoUtils = {
 			subscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
 				if (!store.has(storeKey)) {
@@ -84,12 +85,18 @@ export const domino = <TValue, TContext>(
 					cache.subscribe(subscription)
 				}
 				store.get(storeKey)!.subscribe(subscriber)
+				clearTimeout(gcTimeout)
 			},
 			unsubscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
 				if (!store.has(storeKey)) {
 					return
 				}
-				store.get(storeKey)!.unsubscribe(subscriber)
+				const count = store.get(storeKey)!.unsubscribe(subscriber)
+				if (count === 0 && ttl !== undefined) {
+                    gcTimeout = setTimeout(() => {
+                        dominoUtils.delete()
+                    }, ttl)
+                }
 			},
 			get: () => {
 				if (!store.has(storeKey)) {

@@ -1,9 +1,11 @@
 import { List, Map } from 'immutable'
 import { ObservableCache } from "./cache"
 
-jest.useFakeTimers()
-
 describe('cache', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
     describe('should act like map', () => {
         it('should initialize', () => {
             const cache = new ObservableCache(0, [['key', 'value']])

@@ -2,9 +2,11 @@ import { Store } from "../store"
 import { domino } from "./domino"
 import { trigger } from "./trigger"
 
-jest.useFakeTimers()
-
 describe('domino', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
     afterEach(() => {
         jest.clearAllMocks()
     })
@@ -51,6 +53,8 @@ describe('domino', () => {
 
         root(store).set('test2')
 
+        jest.runAllTimers()
+
         // Validate the cache is used over the value
         expect(sut(store).get()).toBe('test')
     })
@@ -77,11 +81,14 @@ describe('domino', () => {
         
         // Validate the cache is cleared and the value is refreshed
         expect(sut(store).get()).toBe('test')
+
+        // Otherwise the cache will keep it recalculating
+        sut(store).delete()
     })
 
     // Note: This test case is contrived for testing purposes.
     // However, it is a black box way of validating cache functionality.
-    it('should allow caching up to ttl', () => {
+    it('should allow remove at ttl', () => {
         const store = new Store()
 
         const root = trigger(() => 'test')
@@ -101,6 +108,9 @@ describe('domino', () => {
         
         // Validate the cache is cleared and the value is refreshed
         expect(sut(store).get()).toBe('test2')
+
+        // Otherwise the cache will keep it recalculating
+        sut(store).delete()
     })
 
     it('should recalculate on cache-expiry', () => {
@@ -128,6 +138,9 @@ describe('domino', () => {
         jest.advanceTimersByTime(1)
 
         expect(calculation).toBeCalledTimes(2)
+
+        // Otherwise the cache will keep it recalculating
+        sut(store).delete()
     })
 
     it('should domino effect', () => {
@@ -249,6 +262,68 @@ describe('domino', () => {
         root(store).set('test2')
 
         expect(subscription).toBeCalledTimes(0)
+    })
+
+    it('should retain on undefined ttl', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let dominoCount = 0
+        store.subscribe((action, values) => { action === 'add' ? dominoCount += values.length : dominoCount -= values.length })
+
+        const core = trigger(() => 'test')
+        const sut = domino(({ get }) => get(core))
+        sut(store).subscribe(subscription)
+
+        expect(dominoCount).toBe(2)
+
+        sut(store).unsubscribe(subscription)
+
+        jest.runAllTimers()
+
+        expect(dominoCount).toBe(2)
+    })
+
+    it('should retain until ttl', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let dominoCount = 0
+        store.subscribe((action, values) => { action === 'add' ? dominoCount += values.length : dominoCount -= values.length })
+
+        const core = trigger(() => 'test')
+        const sut = domino(({ get }) => get(core), { ttl: 1000 })
+        sut(store).subscribe(subscription)
+
+        expect(dominoCount).toBe(2)
+
+        sut(store).unsubscribe(subscription)
+
+        jest.advanceTimersByTime(999)
+
+        expect(dominoCount).toBe(2)
+
+        jest.advanceTimersByTime(1)
+        
+        expect(dominoCount).toBe(1)
+    })
+
+    it('should not destory while subscribed', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let triggerCount = 0
+        store.subscribe((action, values) => { action === 'add' ? triggerCount += values.length : triggerCount -= values.length })
+
+        const core = trigger(() => 'test')
+        const sut = domino(({ get }) => get(core), { ttl: 1000 })
+        sut(store).subscribe(subscription)
+
+        expect(triggerCount).toBe(2)
+
+        sut(store).unsubscribe(subscription)
+        sut(store).subscribe(subscription)
+
+        jest.runAllTimers()
+        
+        expect(triggerCount).toBe(2)
     })
 
     it('should not crash on unsubscribing deleted', () => {

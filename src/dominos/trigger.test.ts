@@ -2,6 +2,10 @@ import { Store } from "../store"
 import { trigger } from "./trigger"
 
 describe('trigger', () => {
+    beforeAll(() => {
+        jest.useFakeTimers()
+    })
+
     afterEach(() => {
         jest.clearAllMocks()
     })
@@ -79,6 +83,65 @@ describe('trigger', () => {
         sut(store).set('test2')
 
         expect(subscription).toBeCalledTimes(0)
+    })
+
+    it('should retain on undefined ttl', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let triggerCount = 0
+        store.subscribe((action, values) => { action === 'add' ? triggerCount += values.length : triggerCount -= values.length })
+
+        const sut = trigger(() => 'test')
+        sut(store).subscribe(subscription)
+
+        expect(triggerCount).toBe(1)
+
+        sut(store).unsubscribe(subscription)
+
+        jest.runAllTimers()
+
+        expect(triggerCount).toBe(1)
+    })
+
+    it('should retain until ttl', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let triggerCount = 0
+        store.subscribe((action, values) => { action === 'add' ? triggerCount += values.length : triggerCount -= values.length })
+
+        const sut = trigger(() => 'test', { ttl: 1000 })
+        sut(store).subscribe(subscription)
+
+        expect(triggerCount).toBe(1)
+
+        sut(store).unsubscribe(subscription)
+
+        jest.advanceTimersByTime(999)
+
+        expect(triggerCount).toBe(1)
+
+        jest.advanceTimersByTime(1)
+        
+        expect(triggerCount).toBe(0)
+    })
+
+    it('should not destory while subscribed', () => {
+        const store = new Store()
+        const subscription = jest.fn()
+        let triggerCount = 0
+        store.subscribe((action, values) => { action === 'add' ? triggerCount += values.length : triggerCount -= values.length })
+
+        const sut = trigger(() => 'test', { ttl: 1000 })
+        sut(store).subscribe(subscription)
+
+        expect(triggerCount).toBe(1)
+
+        sut(store).unsubscribe(subscription)
+        sut(store).subscribe(subscription)
+
+        jest.runAllTimers()
+        
+        expect(triggerCount).toBe(1)
     })
 
     it('should not crash on unsubscribing when deleted', () => {
