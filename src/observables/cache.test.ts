@@ -6,6 +6,10 @@ describe('cache', () => {
         jest.useFakeTimers()
     })
 
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     describe('should act like map', () => {
         it('should initialize', () => {
             const cache = new ObservableCache(0, [['key', 'value']])

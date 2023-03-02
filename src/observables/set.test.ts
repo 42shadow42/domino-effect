@@ -3,6 +3,10 @@ import { ObservableSet } from "./set"
 
 
 describe('map', () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     describe('should act like set', () => {
         it('should initialize', () => {
             const set = new ObservableSet(['value'])

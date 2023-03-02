@@ -2,6 +2,10 @@ import { Map } from "immutable"
 import { ObservableMap } from "./map"
 
 describe('map', () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+    
     describe('should act like map', () => {
         it('should initialize', () => {
             const map = new ObservableMap([['key', 'value']])

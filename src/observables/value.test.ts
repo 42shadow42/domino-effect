@@ -1,6 +1,10 @@
 import { ObservableValue } from './value'
 
 describe('value', () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
 	it('should initialize', () => {
 		const value = new ObservableValue('value')
 		expect(value.get()).toBe('value')
