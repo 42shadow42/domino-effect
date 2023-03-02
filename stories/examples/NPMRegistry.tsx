@@ -84,7 +84,7 @@ const SearchField = () => {
 	return (
 		<Fragment>
 			<input
-				style={{float: "left"}}
+				style={{ float: 'left' }}
 				type="text"
 				value={value}
 				onChange={(evt) => setValue(evt.target.value)}
@@ -124,16 +124,15 @@ const ResultsEditor = ({ value }: ResultsEditorProps) => {
 	return (
 		<Fragment>
 			<h1>{pack.name}</h1>
-			<input
-				type="text"
+			<textarea
+				style={{ width: '60%' }}
 				value={pack!.description}
 				onChange={(evt) =>
 					setPack({ ...pack!, description: evt.target.value })
 				}
 			/>
-			<button onClick={reset}>
-				Reset
-			</button>
+			<br />
+			<button onClick={reset}>Reset</button>
 		</Fragment>
 	)
 }
@@ -145,7 +144,7 @@ type SearchResultsProps = {
 const SearchResults = ({ onSelectPackage }: SearchResultsProps) => {
 	const value = useAsyncDomino(results)
 	return (
-		<ol style={{float: "left", clear: "left"}}>
+		<ol style={{ float: 'left', clear: 'left' }}>
 			{value.objects.map((object) => (
 				<li
 					key={object.package.name}
