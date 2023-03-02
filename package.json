@@ -4,7 +4,7 @@
   "description": "Reactive state management framework",
   "main": "lib/cjs/index.js",
   "module": "lib/es/index.js",
-  "typings": "src/index.d.ts",
+  "typings": "lib/src/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "test": "jest",

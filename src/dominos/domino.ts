@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable'
+import { Map, List, Record } from 'immutable'
 import {
 	ObservableCache,
 	ObservableValue,
@@ -6,6 +6,7 @@ import {
 } from '../observables'
 import { Store } from '../store'
 import {
+	Context,
 	CoreDomino,
 	DominoEffectCalculation,
 	DominoEffectSettings,
@@ -14,7 +15,7 @@ import {
 	TriggerDomino,
 } from './types'
 
-export const domino = <TValue, TContext>(
+export const domino = <TValue, TContext extends Context>(
 	calculation: DominoEffectCalculation<TValue, TContext>,
 	settings: DominoEffectSettings = {},
 ): CoreDomino<TValue, TContext> => {
@@ -24,16 +25,16 @@ export const domino = <TValue, TContext>(
 	const metadata: DominoMetadata = { type: 'standard' }
 
 	let utilCache =
-		Map<List<Store | TContext | undefined>, DominoUtils<TValue, TContext>>()
+		Map<Record<{store: Store<Context>, context: TContext | undefined }>, DominoUtils<TValue, TContext>>()
 
-	return Object.assign((store: Store, context?: TContext) => {
-		const cacheKey = List([store, context])
+	return Object.assign((store: Store<any>, context?: TContext) => {
+		const cacheKey = Record({ store, context })()
 
 		if (utilCache.has(cacheKey)) {
 			return utilCache.get(cacheKey)!
 		}
 
-		const storeKey = List([handle, context])
+		const storeKey = Record({ handle, context })()
 
 		const cache = new ObservableCache<any, any>(settings.ttl || 0)
 
@@ -52,13 +53,13 @@ export const domino = <TValue, TContext>(
 		}
 
 		const utils = {
-			get: <TValue, TContext>(source: CoreDomino<TValue, TContext>) => {
+			get: <TValue, TContext extends Context>(source: CoreDomino<TValue, TContext>) => {
 				const domino = source(store)
 				_dependencies.add(source)
 				domino.subscribe(subscription)
 				return domino.get()
 			},
-			manage: <TValue, TContext>(
+			manage: <TValue, TContext extends Context>(
 				trigger: TriggerDomino<TValue, TContext>,
 				context?: TContext,
 			) => {
