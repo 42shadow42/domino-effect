@@ -66,9 +66,19 @@ Just keep in mind to expire data, that may get stale.
     <Story story={stories.Caching} />
 </Canvas>
 
-## Custom Stores for Dominos
+### Multiple values
+You can use a single domino for multiple values either by providing a context, or custom stores.
 
-You can use custom stores to access multiple instances of your dominos.
+### Using Context with Domions
+
+You can pass primitives or immutable's (the package) to access contextual values. This allows you to use local state to pick an instance
+
+<Canvas>
+    <Story story={stories.Context} />
+</Canvas>
+
+### Custom Stores for Dominos
+
 You can pass the stores via context to prevent prop drilling.
 To create a store local to your components use useLocalStore, to avoid memory leaks.
 

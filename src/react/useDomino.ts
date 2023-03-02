@@ -4,20 +4,25 @@ import { isTriggerDomino } from '../dominos/types'
 import { GLOBAL_STORE, Store } from '..'
 
 export type SetDominoValue<TValue> = (value: TValue) => void
+export type useDominoOptions<TContext> = {
+	store?: Store
+	context?: TContext
+}
 
-export function useDomino<TValue>(
-	domino: TriggerDomino<TValue>,
-	store?: Store,
+export function useDomino<TValue, TContext = undefined>(
+	domino: TriggerDomino<TValue, TContext>,
+	options?: useDominoOptions<TContext>,
 ): [TValue, SetDominoValue<TValue>]
-export function useDomino<TValue>(
-	domino: CoreDomino<TValue>,
-	store?: Store,
+export function useDomino<TValue, TContext>(
+	domino: CoreDomino<TValue, TContext>,
+	options?: useDominoOptions<TContext>,
 ): TValue
-export function useDomino<TValue>(
-	domino: CoreDomino<TValue> | TriggerDomino<TValue>,
-	store: Store = GLOBAL_STORE,
+export function useDomino<TValue, TContext>(
+	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
+	options: useDominoOptions<TContext> = {},
 ): TValue | [TValue, SetDominoValue<TValue>] {
-	const dominoUtils = domino(store)
+	const { store = GLOBAL_STORE, context = undefined } = options
+	const dominoUtils = domino(store, context)
 	const [value, setValue] = useState(dominoUtils.get())
 
 	useEffect(() => {

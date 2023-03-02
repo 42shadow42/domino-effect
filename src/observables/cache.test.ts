@@ -1,3 +1,4 @@
+import { List, Map } from 'immutable'
 import { ObservableCache } from "./cache"
 
 jest.useFakeTimers()

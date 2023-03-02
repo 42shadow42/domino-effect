@@ -1,6 +1,7 @@
+import { List } from "immutable";
 import { ObservableMap, ObservableValue } from "./observables";
 
-export class Store extends ObservableMap<symbol, ObservableValue<any>> { }
+export class Store extends ObservableMap<List<symbol | any | undefined>, ObservableValue<any>> { }
 
 export const STORES = new ObservableMap<symbol, Store>()
 export const GLOBAL_STORE = new Store()

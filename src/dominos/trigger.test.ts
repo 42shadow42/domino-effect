@@ -9,7 +9,7 @@ describe('trigger', () => {
     it('should create with default value', () => {
         const store = new Store()
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
 
         expect(sut(store).get()).toBe('test')
     })
@@ -17,7 +17,7 @@ describe('trigger', () => {
     it('should create on set', () => {
         const store = new Store()
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).set('test2')
 
         expect(sut(store).get()).toBe('test2')
@@ -26,7 +26,7 @@ describe('trigger', () => {
     it('should update on set', () => {
         const store = new Store()
         
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).get()
         sut(store).set('test2')
 
@@ -37,7 +37,7 @@ describe('trigger', () => {
         const store = new Store()
         store.delete = jest.fn().mockImplementation(store.delete)
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).get()
         const isDeleted = sut(store).delete()
 
@@ -49,7 +49,7 @@ describe('trigger', () => {
         const store = new Store()
         store.delete = jest.fn().mockImplementation(store.delete)
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).get()
         sut(store).delete()
         const isDeleted = sut(store).delete()
@@ -61,7 +61,7 @@ describe('trigger', () => {
         const store = new Store()
         const subscription = jest.fn()
         
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).subscribe(subscription)
         sut(store).set('test2')
 
@@ -73,7 +73,7 @@ describe('trigger', () => {
         const store = new Store()
         const subscription = jest.fn()
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).subscribe(subscription)
         sut(store).unsubscribe(subscription)
         sut(store).set('test2')
@@ -85,7 +85,7 @@ describe('trigger', () => {
         const store = new Store()
         const subscription = jest.fn()
 
-        const sut = trigger('test')
+        const sut = trigger(() => 'test')
         sut(store).subscribe(subscription)
         sut(store).delete()
         sut(store).unsubscribe(subscription)

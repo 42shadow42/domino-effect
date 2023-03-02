@@ -1,56 +1,70 @@
-import { ObservableValue, ObservableValueSubscriber } from "../observables"
-import { Store } from "../store"
-import { CoreDominoSettings, DominoMetadata, TriggerDomino, TriggerDominoUtils } from "./types"
+import { Map, List } from 'immutable'
+import { ObservableValue, ObservableValueSubscriber } from '../observables'
+import { Store } from '../store'
+import {
+	CoreDominoSettings,
+	DominoMetadata,
+	TriggerDomino,
+	TriggerDominoUtils,
+} from './types'
 
-export const trigger = <TValue>(value: TValue, settings: CoreDominoSettings = {}): TriggerDomino<TValue> => {
-    const handle = Symbol()
+export const trigger = <TValue, TContext = undefined>(
+	factory: (context?: TContext) => TValue,
+	settings: CoreDominoSettings = {},
+): TriggerDomino<TValue, TContext> => {
+	const handle = Symbol()
 
-    const { debugLabel } = settings
+	const { debugLabel } = settings
 
-    const cache = new Map<Store, TriggerDominoUtils<TValue>>()
-    const metadata: DominoMetadata = { type: 'trigger' }
+	let cache = Map<
+		List<Store | TContext | undefined>, TriggerDominoUtils<TValue, TContext>>()
+	const metadata: DominoMetadata = { type: 'trigger' }
 
-    return Object.assign((store: Store) => {
-        if (cache.has(store)) {
-            return cache.get(store)!
-        }
+	return Object.assign((store: Store, context?: TContext) => {
+        const cacheKey = List([store, context])
+		if (cache.has(cacheKey)) {
+			return cache.get(cacheKey)!
+		}
+        const storeKey = List([handle, context])
 
-        cache.set(store, {
+        const utils: TriggerDominoUtils<TValue, TContext> = Object.assign({
             get: () => {
-                if (!store.has(handle)) {
-                    store.set(handle, new ObservableValue(value))
+                if (!store.has(storeKey)) {
+                    store.set(storeKey, new ObservableValue(factory(context)))
                 }
                 // private handle ensures the type will always be of TValue
-                return store.get(handle)!.get()
+                return store.get(storeKey)!.get()
             },
             set: (value: TValue) => {
-                if (!store.has(handle)) {
-                    store.set(handle, new ObservableValue(value))
-                    return
+                if (!store.has(storeKey)) {
+                    store.set(storeKey, new ObservableValue(value))
                 }
                 // private handle ensures the type will always be of TValue
-                store.get(handle)!.set(value)
+                store.get(storeKey)!.set(value)
             },
             subscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
-                if (!store.has(handle)) {
-                    store.set(handle, new ObservableValue(value))
+                if (!store.has(storeKey)) {
+                    store.set(storeKey, new ObservableValue(factory(context)))
                 }
-                store.get(handle)!.subscribe(subscriber)
+                store.get(storeKey)!.subscribe(subscriber)
             },
             unsubscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
-                if (!store.has(handle)) {
+                if (!store.has(storeKey)) {
                     return
                 }
-                store.get(handle)!.unsubscribe(subscriber)
+                store.get(storeKey)!.unsubscribe(subscriber)
             },
             delete: () => {
-                cache.delete(store)
-                return store.delete(handle)
+                const newCache = cache.delete(cacheKey)
+                const deleted = newCache.size !== cache.size
+                cache = newCache
+                return store.delete(storeKey) && deleted
             },
             debugLabel,
-        })
+        }, metadata)
 
+        cache = cache.set(cacheKey, utils)
 
-        return cache.get(store)!
-    }, metadata)
+		return cache.get(cacheKey)!
+	}, metadata)
 }

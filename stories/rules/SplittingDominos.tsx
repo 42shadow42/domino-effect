@@ -2,10 +2,10 @@ import { action } from '@storybook/addon-actions'
 import { Fragment, memo } from 'react'
 import { domino, trigger, useDomino } from '@42shadow42/domino-effect'
 
-const core = trigger({
+const core = trigger(() => ({
 	greeting: 'Hello',
 	target: 'world!',
-})
+}))
 
 const greeting = domino(({ get }) => {
 	return get(core).greeting

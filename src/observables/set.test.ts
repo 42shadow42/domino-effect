@@ -1,4 +1,6 @@
+import { Set } from 'immutable'
 import { ObservableSet } from "./set"
+
 
 describe('map', () => {
     describe('should act like set', () => {

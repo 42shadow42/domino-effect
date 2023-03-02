@@ -1,11 +1,11 @@
 import { ObservableCache } from 'src/observables/cache'
-import { ObservableMap, ObservableValueSubscriber } from '../observables'
+import { ObservableValueSubscriber } from '../observables'
 import { Store } from '../store'
 
 export type DominoType = 'standard' | 'trigger'
 export type DominoMetadata = { type: DominoType }
 
-export type GetDominoValue<TValue> = () => TValue
+export type GetDominoValue<TValue, TContext> = (context?: TContext) => TValue
 export type SetDominoValue<TValue> = (value: TValue) => void
 export type DeleteDominoValue = () => void
 export type SubscribeDominoValue<TValue> = (
@@ -15,44 +15,56 @@ export type UnsubscribeDominoValue<TValue> = (
 	subscriber: ObservableValueSubscriber<TValue>,
 ) => void
 
-export type DominoUtils<TValue> = {
-	get: GetDominoValue<TValue>
+export type DominoUtils<TValue, TContext> = {
+	get: GetDominoValue<TValue, TContext>
 	subscribe: SubscribeDominoValue<TValue>
 	unsubscribe: UnsubscribeDominoValue<TValue>
 	delete: DeleteDominoValue
 	debugLabel?: string
 }
 
-export type TriggerDominoUtils<TValue> = DominoUtils<TValue> & {
+export type TriggerDominoUtils<TValue, TContext> = DominoUtils<
+	TValue,
+	TContext
+> & {
 	set: SetDominoValue<TValue>
 }
 
-export type CoreDomino<TValue> = ((store: Store) => DominoUtils<TValue>) &
-	DominoMetadata
-export type TriggerDomino<TValue> = ((
+export type CoreDomino<TValue, TContext> = ((
 	store: Store,
-) => TriggerDominoUtils<TValue>) &
+	context?: TContext,
+) => DominoUtils<TValue, TContext>) &
+	DominoMetadata
+export type TriggerDomino<TValue, TContext> = ((
+	store: Store,
+	context?: TContext,
+) => TriggerDominoUtils<TValue, TContext>) &
 	DominoMetadata
 
-export const isTriggerDomino = <TValue>(
-	domino: CoreDomino<TValue> | TriggerDomino<TValue>,
-): domino is TriggerDomino<TValue> => domino.type === 'trigger'
+export const isTriggerDomino = <TValue, TContext>(
+	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
+): domino is TriggerDomino<TValue, TContext> => domino.type === 'trigger'
 
 export type CoreDominoSettings = {
 	debugLabel?: string
 }
 
-export type DominoEffectUtils = {
-	get: <TValue>(source: CoreDomino<TValue>) => TValue
-	manage: <TValue>(trigger: TriggerDomino<TValue>) => {
+export type DominoEffectUtils<TContext> = {
+	get: <TValue, TContext>(source: CoreDomino<TValue, TContext>, context?: TContext) => TValue
+	manage: <TValue, TContext>(
+		trigger: TriggerDomino<TValue, TContext>,
+		context?: TContext,
+	) => {
 		value: TValue
 		set: SetDominoValue<TValue>
-	}
+	},
+	context: TContext | undefined
 	cache: ObservableCache<any, any>
 }
 
-export type DominoEffectCalculation<TValue> = (
-	utils: DominoEffectUtils,
+export type DominoEffectCalculation<TValue, TContext> = (
+	utils: DominoEffectUtils<TContext>,
+	context?: TContext,
 ) => TValue
 
 export type DominoEffectSettings = {

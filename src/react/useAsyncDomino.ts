@@ -3,19 +3,27 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isTriggerDomino, SetDominoValue } from '../dominos/types'
 import { GLOBAL_STORE, Store } from '..'
 
-export function useAsyncDomino<TValue>(
-	domino: TriggerDomino<Promise<TValue>>,
-	store?: Store,
+export type useAsyncDominoOptions<TContext> = {
+	store?: Store
+	context?: TContext
+}
+
+export function useAsyncDomino<TValue, TContext>(
+	domino: TriggerDomino<Promise<TValue>, TContext>,
+	options?: useAsyncDominoOptions<TContext>,
 ): [TValue, SetDominoValue<Promise<TValue>>]
-export function useAsyncDomino<TValue>(
-	domino: CoreDomino<Promise<TValue>>,
-	store?: Store,
+export function useAsyncDomino<TValue, TContext>(
+	domino: CoreDomino<Promise<TValue>, TContext>,
+	options?: useAsyncDominoOptions<TContext>,
 ): TValue
-export function useAsyncDomino<TValue>(
-	domino: CoreDomino<Promise<TValue>> | TriggerDomino<Promise<TValue>>,
-	store: Store = GLOBAL_STORE,
+export function useAsyncDomino<TValue, TContext>(
+	domino:
+		| CoreDomino<Promise<TValue>, TContext>
+		| TriggerDomino<Promise<TValue>, TContext>,
+	options: useAsyncDominoOptions<TContext> = {},
 ): TValue | [TValue, SetDominoValue<Promise<TValue>>] {
-	const dominoUtils = domino(store)
+	const { store = GLOBAL_STORE, context = undefined } = options
+	const dominoUtils = domino(store, context)
 	const promise = useMemo(() => {
 		return dominoUtils.get()
 	}, [dominoUtils])

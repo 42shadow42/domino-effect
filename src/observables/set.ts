@@ -1,14 +1,16 @@
+import { Set as ImmutableSet } from 'immutable'
+
 export type ObservableSetAction = 'add' | 'remove'
 export type ObservableSetActionData<TValue> = TValue[]
 export type ObservableSetSubscriber<TValue> = (action: ObservableSetAction, values: ObservableSetActionData<TValue>) => void
-export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue, map: Set<TValue>) => void
+export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue, map: ImmutableSet<TValue>) => void
 
 export class ObservableSet<TValue> {
-    private _set = new Set<TValue>() 
+    private _set = ImmutableSet<TValue>() 
     private _subscribers = new Set<ObservableSetSubscriber<TValue>>()
 
-    constructor(iterable?: Iterable<TValue> | null) {
-        this._set = new Set<TValue>(iterable)
+    constructor(iterable?: Iterable<TValue>) {
+        this._set = ImmutableSet<TValue>(iterable)
     }
 
     subscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
@@ -25,20 +27,23 @@ export class ObservableSet<TValue> {
         }
 
         const set = this._set
-        this._set = new Set<TValue>()
+        this._set = set.clear()
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('remove', [...set.values()])
         })
     }
 
     delete = (value: TValue) => {
-        const removed = this._set.delete(value)
-        if (removed) {
-            new Set(this._subscribers).forEach((subscriber) => {
-                subscriber('remove', [value])
-            })
-        }
-        return removed
+		const newSet = this._set.delete(value)
+		const removed = this._set.size !== newSet.size
+		this._set = newSet
+
+		if (removed) {
+			new Set(this._subscribers).forEach((subscriber) => {
+				subscriber('remove', [value])
+			})
+		}
+		return removed
     }
 
     add = (value: TValue) => {
@@ -46,7 +51,7 @@ export class ObservableSet<TValue> {
             return
         }
         
-        this._set.add(value)
+        this._set = this._set.add(value)
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('add', [value])
         })

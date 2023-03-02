@@ -12,7 +12,7 @@ describe('domino', () => {
     it('should allow get', () => {
         const store = new Store()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -22,7 +22,7 @@ describe('domino', () => {
 
     it('should allow manage', () => {
         const store = new Store()
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ manage }) => {
             return manage(root)
         })
@@ -37,7 +37,7 @@ describe('domino', () => {
     it('should allow caching', () => {
         const store = new Store()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get, cache }) => {
             if (cache.get(root)) {
                 return cache.get(root)
@@ -60,7 +60,7 @@ describe('domino', () => {
     it('should allow caching up to ttl', () => {
         const store = new Store()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get, cache }) => {
             if (cache.get(root)) {
                 return cache.get(root)
@@ -84,7 +84,7 @@ describe('domino', () => {
     it('should allow caching up to ttl', () => {
         const store = new Store()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get, cache }) => {
             if (cache.get(root)) {
                 return cache.get(root)
@@ -106,7 +106,7 @@ describe('domino', () => {
     it('should recalculate on cache-expiry', () => {
         const store = new Store()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const calculation = jest.fn(({ get, cache }) => {
             if (cache.get(root)) {
                 return cache.get(root)
@@ -133,7 +133,7 @@ describe('domino', () => {
     it('should domino effect', () => {
         const store = new Store()
         
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -148,7 +148,7 @@ describe('domino', () => {
             return get(root)
         })
         
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(calculate)
         root(store).set('test2')
         sut(store).get()
@@ -161,7 +161,7 @@ describe('domino', () => {
         const store = new Store()
         store.delete = jest.fn().mockImplementation(store.delete)
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -177,7 +177,7 @@ describe('domino', () => {
         const store = new Store()
         store.delete = jest.fn().mockImplementation(store.delete)
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -194,7 +194,7 @@ describe('domino', () => {
         const store = new Store()
         store.delete = jest.fn().mockImplementation(store.delete)
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -209,7 +209,7 @@ describe('domino', () => {
         const store = new Store()
         const subscription = jest.fn()
         
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -224,7 +224,7 @@ describe('domino', () => {
         const store = new Store()
         const subscription = jest.fn()
         
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -240,7 +240,7 @@ describe('domino', () => {
         const store = new Store()
         const subscription = jest.fn()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })
@@ -255,7 +255,7 @@ describe('domino', () => {
         const store = new Store()
         const subscription = jest.fn()
 
-        const root = trigger('test')
+        const root = trigger(() => 'test')
         const sut = domino(({ get }) => {
             return get(root)
         })

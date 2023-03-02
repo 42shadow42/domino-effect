@@ -8,7 +8,7 @@ import {
 	useDomino,
 } from '@42shadow42/domino-effect'
 
-const core = trigger('Hello')
+const core = trigger(() => 'Hello')
 const derivative = domino(({ get }) => {
 	return get(core) + ' world!'
 })
@@ -38,7 +38,7 @@ export const DefaultStore = () => {
 
 export const CustomStore = () => {
 	const store = useContext(storeContext)
-	const value = useDomino(combined, store)
+	const value = useDomino(combined, { store })
 	return (
 		<Fragment>
 			<h4>{value.derivative}</h4>
@@ -51,12 +51,11 @@ export const CustomStore = () => {
 	)
 }
 
-// TEMPORARY STORE
 const LocalStoreContext = createContext(GLOBAL_STORE)
 
 export const LocalStore = () => {
 	const store = useContext(LocalStoreContext)
-	const value = useDomino(combined, store)
+	const value = useDomino(combined, { store })
 	return (
 		<Fragment>
 			<h4>{value.derivative}</h4>

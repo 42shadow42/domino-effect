@@ -103,6 +103,21 @@ Caching.parameters = {
 	},
 }
 
+import { Context as ContextComponent } from './Context'
+// @ts-ignore
+import ContextSource from '!!raw-loader!./Context'
+
+export const Context = ContextComponent.bind({})
+// @ts-ignore
+Context.parameters = {
+	docs: {
+		source: {
+			code: ContextSource,
+			language: 'tsx',
+		},
+	},
+}
+
 import { CustomStoresExample as CustomStoresComponent } from './CustomStores'
 // @ts-ignore
 import CustomStoresSource from '!!raw-loader!./CustomStores'
