@@ -6,10 +6,6 @@ const derivative = domino(({ get }) => {
 })
 
 export const Domino = () => {
-	const Domino = () => {
-		const value = useDomino(derivative)
-		return <h4>{value}</h4>
-	}
-
-	return <Domino />
+	const value = useDomino(derivative)
+	return <h4>{value}</h4>
 }
