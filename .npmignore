@@ -4,9 +4,11 @@
 coverage
 lib/stories
 node_modules
+playwright
 src
 stories
 storybook-static
+test-results
 .eslintrc
 .DS_Store
 .gitignore
@@ -15,6 +17,8 @@ storybook-static
 .prettierignore
 .prettierrc.json
 babel.config.js
+jest.config.ts
+playwright.config.ts
 rollup.config.mjs
 tsconfig.json
 42shadow42-domino-effect-*.tgz

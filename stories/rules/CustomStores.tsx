@@ -26,8 +26,9 @@ export const DefaultStore = () => {
 	const value = useDomino(combined)
 	return (
 		<Fragment>
-			<h4>{value.derivative}</h4>
+			<h4 aria-label="Default Store">{value.derivative}</h4>
 			<input
+				aria-label="Default Store"
 				type="text"
 				value={value.core.value}
 				onChange={(evt) => value.core.set(evt.target.value)}
@@ -41,8 +42,9 @@ export const CustomStore = () => {
 	const value = useDomino(combined, { store })
 	return (
 		<Fragment>
-			<h4>{value.derivative}</h4>
+			<h4 aria-label="Custom Store">{value.derivative}</h4>
 			<input
+				aria-label="Custom Store"
 				type="text"
 				value={value.core.value}
 				onChange={(evt) => value.core.set(evt.target.value)}
@@ -58,8 +60,9 @@ export const LocalStore = () => {
 	const value = useDomino(combined, { store })
 	return (
 		<Fragment>
-			<h4>{value.derivative}</h4>
+			<h4 aria-label="Local Store">{value.derivative}</h4>
 			<input
+				aria-label="Local Store"
 				type="text"
 				value={value.core.value}
 				onChange={(evt) => value.core.set(evt.target.value)}

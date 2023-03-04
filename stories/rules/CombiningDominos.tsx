@@ -17,8 +17,9 @@ export const CombiningDominos = () => {
 	const value = useDomino(combined)
 	return (
 		<Fragment>
-			<h4>{value.derivative}</h4>
+			<h4 aria-label="Domino">{value.derivative}</h4>
 			<input
+				aria-label="Trigger"
 				type="text"
 				value={value.core.value}
 				onChange={(evt) => value.core.set(evt.target.value)}

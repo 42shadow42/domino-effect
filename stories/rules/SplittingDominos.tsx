@@ -31,10 +31,11 @@ export const SplittingDominos = () => {
 	const [value, setValue] = useDomino(core)
 	return (
 		<Fragment>
-			<h4>
+			<h4 aria-label="Display Value">
 				<GreetingDisplay /> <TargetDisplay />
 			</h4>
 			<input
+				aria-label="Greeting"
 				type="text"
 				value={value.greeting}
 				onChange={(evt) =>
@@ -42,6 +43,7 @@ export const SplittingDominos = () => {
 				}
 			/>
 			<input
+				aria-label="Target"
 				type="text"
 				value={value.target}
 				onChange={(evt) =>

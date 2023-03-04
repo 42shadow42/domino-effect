@@ -7,5 +7,5 @@ const derivative = domino(({ get }) => {
 
 export const Domino = () => {
 	const value = useDomino(derivative)
-	return <h4>{value}</h4>
+	return <h4 aria-label="Domino">{value}</h4>
 }

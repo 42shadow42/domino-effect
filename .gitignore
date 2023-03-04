@@ -6,3 +6,6 @@ storybook-static
 .DS_Store
 .eslintcache
 42shadow42-domino-effect-*.tgz
+/test-results/
+/playwright-report/
+/playwright/.cache/

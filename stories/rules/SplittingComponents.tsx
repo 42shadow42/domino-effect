@@ -8,7 +8,7 @@ const derivative = domino(({ get }) => {
 
 const Domino = () => {
 	const value = useDomino(derivative)
-	return <h4>{value}</h4>
+	return <h4 aria-label="Domino">{value}</h4>
 }
 
 const Trigger = () => {
@@ -16,6 +16,7 @@ const Trigger = () => {
 	return (
 		<Fragment>
 			<input
+				aria-label="Trigger"
 				type="text"
 				value={value}
 				onChange={(evt) => setValue(evt.target.value)}

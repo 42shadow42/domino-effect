@@ -60,6 +60,7 @@ const Editor = () => {
 	return (
 		<Fragment>
 			<input
+				aria-label="Greeting"
 				type="text"
 				value={value.values.greeting}
 				onChange={(evt) =>
@@ -72,6 +73,7 @@ const Editor = () => {
 				}
 			/>
 			<input
+				aria-label="Target"
 				type="text"
 				value={value.values.target}
 				onChange={(evt) =>
@@ -90,7 +92,7 @@ const Editor = () => {
 export const SplittingAsyncDominos = () => {
 	return (
 		<Fragment>
-			<h4>
+			<h4 aria-label="Display Value">
 				<DominoSuspense fallback="loading" props={{}}>
 					{GreetingDisplay}
 				</DominoSuspense>{' '}

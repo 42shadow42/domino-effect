@@ -18,10 +18,10 @@ export const Context = () => {
 	return (
 		<Fragment>
 			<h4>Contextual</h4>
-            Context: <input type="text" value={context} onChange={(evt) => setContext(evt.target.value)} /> 
-            Value: <input type="text" value={dominos.contextual.value} onChange={(evt) => dominos.contextual.set(evt.target.value)} />
+            Context: <input aria-label="Context" type="text" value={context} onChange={(evt) => setContext(evt.target.value)} /> 
+            Value: <input aria-label="Contextual Value" type="text" value={dominos.contextual.value} onChange={(evt) => dominos.contextual.set(evt.target.value)} />
             <h4>Non contextual</h4>
-            Value: <input type="text" value={dominos.nonContextual.value} onChange={(evt) => dominos.nonContextual.set(evt.target.value)} />
+            Value: <input aria-label="Non Contextual Value" type="text" value={dominos.nonContextual.value} onChange={(evt) => dominos.nonContextual.set(evt.target.value)} />
 		</Fragment>
 	)
 }
