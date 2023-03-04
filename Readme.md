@@ -2,7 +2,7 @@
 
 A simple state management framework for react that relies on core triggers to cascade state to dependent system through a domino effect. In contrast to redux where all state is managed through a series of potentionally complex interactions of actions and reducers. Instead this state management framework paradigm relies on a series of core editable triggers and domninos that express the relationship between those datapoints and the overall application state.
 
-See the storybook at [Domnio Effect](https://42shadow42.github.io/domino-effect/) for examples and documentation.
+See the storybook at [Domino Effect](https://42shadow42.github.io/domino-effect/) for examples and documentation.
 
 ## Getting Started
 
