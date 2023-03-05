@@ -39,13 +39,13 @@ export function useDomino<TValue, TContext extends Context>(
 		(value: TValue | ((value: TValue) => TValue)) => {
 			if (isTriggerDomino(domino)) {
 				if (value instanceof Function) {
-					domino(store, context).set(value(domino(store).get()))
+					domino(store, context).set(value(domino(store, context).get()))
 					return
 				}
 				domino(store, context).set(value)
 			}
 		},
-		[domino],
+		[domino, store, context],
 	)
 
 	if (isTriggerDomino(domino)) {

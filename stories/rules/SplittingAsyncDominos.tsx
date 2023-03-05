@@ -55,17 +55,17 @@ const TargetDisplay = () => {
 }
 
 const Editor = () => {
-	const value = useAsyncDomino(manager)
+	const [value, setValue] = useAsyncDomino(core)
 	return (
 		<Fragment>
 			<input
 				aria-label="Greeting"
 				type="text"
-				value={value.values.greeting}
+				value={value.greeting}
 				onChange={(evt) =>
-					value.manage.set(
+					setValue(
 						Promise.resolve({
-							...value.values,
+							...value,
 							greeting: evt.target.value,
 						}),
 					)
@@ -74,11 +74,11 @@ const Editor = () => {
 			<input
 				aria-label="Target"
 				type="text"
-				value={value.values.target}
+				value={value.target}
 				onChange={(evt) =>
-					value.manage.set(
+					setValue(
 						Promise.resolve({
-							...value.values,
+							...value,
 							target: evt.target.value,
 						}),
 					)
