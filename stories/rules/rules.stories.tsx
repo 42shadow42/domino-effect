@@ -28,31 +28,16 @@ Domino.parameters = {
 	},
 }
 
-import { CombiningDominos as CombindingDominosComponent } from './CombiningDominos'
+import { MultipleDominos as MultipleDominosComponent } from './MultipleDominos'
 // @ts-ignore
-import CombiningDominosSource from '!!raw-loader!./CombiningDominos'
+import MultipleDominosSource from '!!raw-loader!./MultipleDominos'
 
-export const CombiningDominos = CombindingDominosComponent.bind({})
+export const MultipleDominos = MultipleDominosComponent.bind({})
 // @ts-ignore
-CombiningDominos.parameters = {
+MultipleDominos.parameters = {
 	docs: {
 		source: {
-			code: CombiningDominosSource,
-			language: 'tsx',
-		},
-	},
-}
-
-import { SplittingComponents as SplittingComponentsComponent } from './SplittingComponents'
-// @ts-ignore
-import SplittingComponentsSource from '!!raw-loader!./SplittingComponents'
-
-export const SplittingComponents = SplittingComponentsComponent.bind({})
-// @ts-ignore
-SplittingComponents.parameters = {
-	docs: {
-		source: {
-			code: SplittingComponentsSource,
+			code: MultipleDominosSource,
 			language: 'tsx',
 		},
 	},

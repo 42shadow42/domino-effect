@@ -22,20 +22,12 @@ Dominos are derived from triggers, they exhibit the domino effect and will casca
 </Canvas>
 
 
-## One domino per component
-In order to support asynchronous behaviors within the react rules of hooks, only one domino can be used per component. It also must be the last hook.
-If you need more than one, consider splitting the component or combining dominos. 
-
-### Splitting Components
+## Multiple Dominons
+Prior to react 18.3.0 it was necessary to limit domino usage to a single domino per component.
+Due to the release of the use hook in 18.3.0 this limitation has been lifted, and the rules required Splitting Components or Combining Dominos no longer apply.
 
 <Canvas>
-    <Story story={stories.SplittingComponents} />
-</Canvas>
-
-### Combining Dominos
-
-<Canvas>
-    <Story story={stories.CombiningDominos} />
+    <Story story={stories.MultipleDominos} />
 </Canvas>
 
 ## Select only what you need
