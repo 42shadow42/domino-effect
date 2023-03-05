@@ -1,9 +1,9 @@
 import { CoreDomino, TriggerDomino } from '../dominos'
 import { useCallback, useEffect, useState } from 'react'
 import { Context, isTriggerDomino } from '../dominos/types'
+import { SetDominoValue } from './types'
 import { GLOBAL_STORE, Store } from '..'
 
-export type SetDominoValue<TValue> = (value: TValue) => void
 export type useDominoOptions<TContext> = {
 	store?: Store
 	context?: TContext
@@ -21,7 +21,7 @@ export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
 	options: useDominoOptions<TContext> = {},
 ): TValue | [TValue, SetDominoValue<TValue>] {
-	const { store = GLOBAL_STORE, context = undefined } = options
+	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
 	const [value, setValue] = useState(dominoUtils.get())
 
@@ -36,9 +36,13 @@ export function useDomino<TValue, TContext extends Context>(
 	}, [dominoUtils])
 
 	const setDominoValue = useCallback(
-		(value: TValue) => {
+		(value: TValue | ((value: TValue) => TValue)) => {
 			if (isTriggerDomino(domino)) {
-				domino(store).set(value)
+				if (value instanceof Function) {
+					domino(store, context).set(value(domino(store).get()))
+					return
+				}
+				domino(store, context).set(value)
 			}
 		},
 		[domino],

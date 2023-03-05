@@ -2,7 +2,7 @@ import { NPMRegistry as NPMRegistryComponent } from './NPMRegistry'
 // @ts-ignore
 import NPMRegistrySource from '!!raw-loader!./NPMRegistry'
 
-const NPMRegistry = NPMRegistryComponent.bind({})
+export const NPMRegistry = NPMRegistryComponent.bind({})
 // @ts-ignore
 NPMRegistry.parameters = {
 	docs: {
@@ -14,6 +14,23 @@ NPMRegistry.parameters = {
 	},
 }
 
+import { ChatServer as ChatServerComponent } from './ChatServer'
+// @ts-ignore
+import ChatServerSource from '!!raw-loader!./ChatServer'
+
+export const ChatServer = ChatServerComponent.bind({})
+// @ts-ignore
+ChatServer.parameters = {
+	docs: {
+		source: {
+			code: ChatServerSource,
+			language: 'tsx',
+			type: 'code',
+		},
+	},
+}
+
 export default {
 	NPMRegistry,
 }
+

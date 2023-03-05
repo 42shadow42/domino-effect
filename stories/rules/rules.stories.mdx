@@ -78,5 +78,12 @@ To create a store local to your components use useLocalStore, to avoid memory le
     <Story story={stories.CustomStores} />
 </Canvas>
 
+### Manual Cleanup
 
+Sometimes you create resources that must be cleaned up manual such as web socket connections.
+You can do that using the onDelete callback when configured a sensitive domino.
+Keep in mind the onDelete callback will never be called without a ttl configured as well.
 
+<Canvas>
+    <Story story={stories.ManualCleanup} />
+</Canvas>

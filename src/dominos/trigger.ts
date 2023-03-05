@@ -10,7 +10,7 @@ import {
 	TriggerDominoUtils,
 } from './types'
 
-export const trigger = <TValue, TContext extends Context>(
+export const trigger = <TValue, TContext extends Context = undefined>(
 	factory: (context?: TContext) => TValue,
 	settings: CoreDominoSettings = {},
 ): TriggerDomino<TValue, TContext> => {

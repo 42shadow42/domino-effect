@@ -1,0 +1,1 @@
+export type SetDominoValue<TValue> = (value: TValue | ((value: TValue) => TValue)) => void

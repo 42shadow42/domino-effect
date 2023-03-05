@@ -1,4 +1,4 @@
-import { Map, List, Record } from 'immutable'
+import { Map, Record } from 'immutable'
 import {
 	ObservableCache,
 	ObservableValue,
@@ -16,13 +16,13 @@ import {
 	TriggerDomino,
 } from './types'
 
-export const domino = <TValue, TContext extends Context>(
+export const domino = <TValue, TContext extends Context = undefined>(
 	calculation: DominoEffectCalculation<TValue, TContext>,
 	settings: DominoEffectSettings = {},
 ): CoreDomino<TValue, TContext> => {
 	const handle = Symbol()
 
-	const { debugLabel, ttl } = settings
+	const { debugLabel, ttl, onDelete } = settings
 	const metadata: DominoMetadata = { type: 'standard' }
 
 	let utilCache =
@@ -115,8 +115,13 @@ export const domino = <TValue, TContext extends Context>(
 				new Set(_dependencies).forEach((dependency) =>
 					dependency(store).unsubscribe(subscription),
 				)
-				cache.unsubscribe(subscription)
-				cache.delete(store)
+
+				onDelete?.({ cache })
+				cache.unsubscribe(subscription)	
+				cache.clear()
+
+				utilCache.delete(cacheKey)
+				
 				return store.delete(storeKey)
 			},
 			debugLabel,

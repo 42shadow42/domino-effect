@@ -1,3 +1,4 @@
+import { ObservableCache } from "../observables"
 import { Store } from "../store"
 import { domino } from "./domino"
 import { trigger } from "./trigger"
@@ -201,6 +202,21 @@ describe('domino', () => {
         sut(store).delete()
 
         expect(rootImpl.unsubscribe).toBeCalledTimes(1)
+    })
+
+    it('should call onDelete handler on deletion', () => {
+        const store = new Store()
+        const onDelete = jest.fn()
+        
+        const root = trigger(() => 'test')
+        const sut = domino(({ get }) => {
+            return get(root)
+        }, { onDelete })
+        sut(store).get()
+        sut(store).delete()
+
+        expect(onDelete).toBeCalledTimes(1)
+        expect(onDelete).toBeCalledWith({ cache: expect.any(ObservableCache)})
     })
 
     it('should not crash on double delete', () => {

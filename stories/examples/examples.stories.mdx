@@ -1,5 +1,5 @@
 import { Meta, Story, Canvas, Source } from '@storybook/addon-docs';
-import stories from './examples.stories.ts';
+import * as stories from './examples.stories.ts';
 import { Component } from 'react';
 
 <Meta title="Domino/Examples" component={Component} />
@@ -10,5 +10,14 @@ import { Component } from 'react';
 
 <Canvas>
   <Story story={stories.NPMRegistry} />
+</Canvas>
+
+## Chat Server
+
+The chat server depends on an underlying web service, and won't function in GH Pages at present.
+To see it working you can download the code and run the commands `npm run start-server` and `npm run storybook` in separate terminals.
+
+<Canvas>
+  <Story story={stories.ChatServer} />
 </Canvas>
 

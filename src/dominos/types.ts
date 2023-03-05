@@ -16,6 +16,7 @@ export type Context =
 	| string
 	| boolean
 	| number
+	| undefined
 export type DominoType = 'standard' | 'trigger'
 export type DominoMetadata = { type: DominoType }
 
@@ -77,6 +78,10 @@ export type DominoEffectUtils<TContext extends Context> = {
 	cache: ObservableCache<any, any>
 }
 
+export type DominoDestroyedUtils = {
+	cache: ObservableCache<any, any>
+}
+
 export type DominoEffectCalculation<TValue, TContext extends Context> = (
 	utils: DominoEffectUtils<TContext>,
 	context?: TContext,
@@ -85,6 +90,7 @@ export type DominoEffectCalculation<TValue, TContext extends Context> = (
 export type DominoEffectSettings = {
 	debugLabel?: string
 	ttl?: number
+	onDelete?: ({ cache }: DominoDestroyedUtils) => void 
 }
 
 export type CacheKey<TContext> = {store: Store, context: TContext | undefined }

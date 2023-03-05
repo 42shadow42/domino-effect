@@ -6,6 +6,7 @@ lib/stories
 node_modules
 playwright
 playwright-report
+server
 src
 stories
 storybook-static

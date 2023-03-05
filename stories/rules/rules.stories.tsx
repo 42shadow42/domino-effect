@@ -103,7 +103,7 @@ Context.parameters = {
 	},
 }
 
-import { CustomStoresExample as CustomStoresComponent } from './CustomStores'
+import { CustomStores as CustomStoresComponent } from './CustomStores'
 // @ts-ignore
 import CustomStoresSource from '!!raw-loader!./CustomStores'
 
@@ -113,6 +113,21 @@ CustomStores.parameters = {
 	docs: {
 		source: {
 			code: CustomStoresSource,
+			language: 'tsx',
+		},
+	},
+}
+
+import { ManualCleanup as ManualCleanupComponent } from './ManualCleanup'
+// @ts-ignore
+import ManualCleanupSource from '!!raw-loader!./ManualCleanup'
+
+export const ManualCleanup = ManualCleanupComponent.bind({})
+// @ts-ignore
+ManualCleanup.parameters = {
+	docs: {
+		source: {
+			code: ManualCleanupSource,
 			language: 'tsx',
 		},
 	},

@@ -71,7 +71,7 @@ export const LocalStore = () => {
 	)
 }
 
-export const CustomStoresExample = () => {
+export const CustomStores = () => {
 	const store = useLocalStore('Local Store')
 	return (
 		<Fragment>
