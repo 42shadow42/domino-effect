@@ -1,6 +1,6 @@
 import { CoreDomino, TriggerDomino } from '../dominos'
 import { useCallback, useEffect, useState } from 'react'
-import { isTriggerDomino } from '../dominos/types'
+import { Context, isTriggerDomino } from '../dominos/types'
 import { GLOBAL_STORE, Store } from '..'
 
 export type SetDominoValue<TValue> = (value: TValue) => void
@@ -9,15 +9,15 @@ export type useDominoOptions<TContext> = {
 	context?: TContext
 }
 
-export function useDomino<TValue, TContext = undefined>(
+export function useDomino<TValue, TContext extends Context>(
 	domino: TriggerDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
 ): [TValue, SetDominoValue<TValue>]
-export function useDomino<TValue, TContext>(
+export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
 ): TValue
-export function useDomino<TValue, TContext>(
+export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
 	options: useDominoOptions<TContext> = {},
 ): TValue | [TValue, SetDominoValue<TValue>] {

@@ -1,8 +1,7 @@
-import { Fragment } from 'react'
+import { Fragment, Suspense } from 'react'
 import { action } from '@storybook/addon-actions'
 import {
 	domino,
-	DominoSuspense,
 	trigger,
 	useAsyncDomino,
 } from '@42shadow42/domino-effect'
@@ -93,14 +92,16 @@ export const SplittingAsyncDominos = () => {
 	return (
 		<Fragment>
 			<h4 aria-label="Display Value">
-				<DominoSuspense fallback="loading" props={{}}>
-					{GreetingDisplay}
-				</DominoSuspense>{' '}
-				<DominoSuspense fallback="loading" props={{}}>
-					{TargetDisplay}
-				</DominoSuspense>
+				<Suspense fallback="loading">
+					<GreetingDisplay />
+				</Suspense>{' '}
+				<Suspense fallback="loading">
+					<TargetDisplay />
+				</Suspense>
 			</h4>
-			<DominoSuspense fallback="loading" props={{}}>{Editor}</DominoSuspense>
+			<Suspense fallback="loading">
+				<Editor />
+			</Suspense>
 		</Fragment>
 	)
 }

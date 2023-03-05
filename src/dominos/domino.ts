@@ -4,8 +4,9 @@ import {
 	ObservableValue,
 	ObservableValueSubscriber,
 } from '../observables'
-import { Store } from '../store'
+import { Store, StoreKey } from '../store'
 import {
+	CacheKey,
 	Context,
 	CoreDomino,
 	DominoEffectCalculation,
@@ -25,16 +26,16 @@ export const domino = <TValue, TContext extends Context>(
 	const metadata: DominoMetadata = { type: 'standard' }
 
 	let utilCache =
-		Map<Record<{store: Store<Context>, context: TContext | undefined }>, DominoUtils<TValue, TContext>>()
+		Map<Record<CacheKey<TContext>>, DominoUtils<TValue, TContext>>()
 
-	return Object.assign((store: Store<any>, context?: TContext) => {
+	return Object.assign((store: Store, context?: TContext) => {
 		const cacheKey = Record({ store, context })()
 
 		if (utilCache.has(cacheKey)) {
 			return utilCache.get(cacheKey)!
 		}
 
-		const storeKey = Record({ handle, context })()
+		const storeKey = Record<StoreKey>({ handle, context })()
 
 		const cache = new ObservableCache<any, any>(settings.ttl || 0)
 

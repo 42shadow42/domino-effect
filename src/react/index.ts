@@ -1,5 +1,3 @@
 export { useAsyncDomino } from './useAsyncDomino'
 export { useDomino } from './useDomino'
 export { useLocalStore } from './useLocalStore'
-export { DominoSuspense } from './suspense'
-export type { DominoSuspenseProps } from './suspense'  

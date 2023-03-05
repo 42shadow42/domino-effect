@@ -1,7 +1,8 @@
 import { Map, Record } from 'immutable'
 import { ObservableValue, ObservableValueSubscriber } from '../observables'
-import { Store } from '../store'
+import { Store, StoreKey } from '../store'
 import {
+	CacheKey,
 	Context,
 	CoreDominoSettings,
 	DominoMetadata,
@@ -19,17 +20,17 @@ export const trigger = <TValue, TContext extends Context>(
 
 	let cache =
 		Map<
-			Record<{ store: Store<Context>; context: TContext | undefined }>,
+			Record<CacheKey<TContext>>,
 			TriggerDominoUtils<TValue, TContext>
 		>()
 	const metadata: DominoMetadata = { type: 'trigger' }
 
-	return Object.assign((store: Store<any>, context?: TContext) => {
+	return Object.assign((store: Store, context?: TContext) => {
 		const cacheKey = Record({ store, context })()
 		if (cache.has(cacheKey)) {
 			return cache.get(cacheKey)!
 		}
-		const storeKey = Record({ handle, context })()
+		const storeKey = Record<StoreKey>({ handle, context })()
 
 		let gcTimeout: NodeJS.Timeout
 		const utils: TriggerDominoUtils<TValue, TContext> = Object.assign(

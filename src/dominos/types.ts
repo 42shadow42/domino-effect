@@ -45,12 +45,12 @@ export type TriggerDominoUtils<TValue, TContext extends Context> = DominoUtils<
 }
 
 export type CoreDomino<TValue, TContext extends Context> = ((
-	store: Store<Context>,
+	store: Store,
 	context?: TContext,
 ) => DominoUtils<TValue, TContext>) &
 	DominoMetadata
 export type TriggerDomino<TValue, TContext extends Context> = ((
-	store: Store<Context>,
+	store: Store,
 	context?: TContext,
 ) => TriggerDominoUtils<TValue, TContext>) &
 	DominoMetadata
@@ -86,3 +86,5 @@ export type DominoEffectSettings = {
 	debugLabel?: string
 	ttl?: number
 }
+
+export type CacheKey<TContext> = {store: Store, context: TContext | undefined }
