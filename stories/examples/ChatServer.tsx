@@ -25,12 +25,10 @@ type ChatRoomControls = {
 
 const chatRoom = domino<Promise<ChatRoomControls>, string>(
 	async ({ get, context, cache }) => {
-		if (cache.has('promise') && cache.has('socket')) {
+		if (cache.has('promise') && cache.has('send')) {
 			return {
-				send: (message: string) => {
-					cache.get('socket')!.send(message)
-				},
-				details: await cache.get('promise'),
+				send: cache.get('send')!,
+				details: await cache.get('promise')!
 			}
 		}
 		const user = get(userState)
@@ -77,16 +75,18 @@ const chatRoom = domino<Promise<ChatRoomControls>, string>(
 			}
 		}
 
+		cache.set('send', (message: string) => {
+			cache.get('socket')!.send(
+				JSON.stringify({
+					user,
+					message,
+				}),
+			)
+		},)
+
 		return {
-			send: (message: string) => {
-				cache.get('socket')!.send(
-					JSON.stringify({
-						user,
-						message,
-					}),
-				)
-			},
-			details: await cache.get('promise'),
+			send: cache.get('send')!,
+			details: await cache.get('promise')!,
 		}
 	},
 	{
