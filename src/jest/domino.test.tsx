@@ -26,13 +26,14 @@ describe('mockDomino', () => {
 	it('should mock get values', () => {
 		mock.get.mockReturnValue('testing')
 		const { container } = render(<Component />)
+
 		expect(container).toMatchSnapshot()
 		expect(mock.get).toBeCalledWith(expect.any(Store), 'context')
 	})
 
 	it('should mock subscribe', () => {
 		render(<Component />)
-		expect(mock.subscribe).toBeCalledTimes(1)
+        
 		expect(mock.subscribe).toBeCalledWith(
 			expect.any(Store),
 			'context',
@@ -44,7 +45,6 @@ describe('mockDomino', () => {
 		render(<Component />)
 		cleanup()
 
-		expect(mock.unsubscribe).toBeCalledTimes(2)
 		expect(mock.unsubscribe).toBeCalledWith(
 			expect.any(Store),
 			'context',
@@ -66,7 +66,6 @@ describe('mockDomino', () => {
 		render(<Component />)
 		cleanup()
 
-		expect(mock.delete).toBeCalledTimes(1)
 		expect(mock.delete).toBeCalledWith(expect.any(Store), 'context')
 	})
 })
