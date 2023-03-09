@@ -1,7 +1,7 @@
 import { List, Record, Collection, Map, Set, OrderedMap, OrderedSet, Stack, Seq } from 'immutable'
 import { ObservableCache } from 'src/observables/cache'
 import { ObservableValueSubscriber } from '../observables'
-import { Store } from '../store'
+import { Store } from './store'
 
 export type Context =
 	| List<any>

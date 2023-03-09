@@ -1,11 +1,9 @@
-import { CoreDomino, TriggerDomino } from '../dominos'
 // use not yet typed
 // @ts-ignore
 import { use } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { Context, isTriggerDomino } from '../dominos/types'
-import { SetDominoValue } from './types'
-import { GLOBAL_STORE, Store } from '..'
+import { CoreDomino, TriggerDomino, Context, isTriggerDomino,  GLOBAL_STORE, Store } from '../dominos'
+import { ReactSetDominoValue } from './types'
 
 export type useAsyncDominoOptions<TContext> = {
 	store?: Store
@@ -15,7 +13,7 @@ export type useAsyncDominoOptions<TContext> = {
 export function useAsyncDomino<TValue, TContext extends Context>(
 	domino: TriggerDomino<Promise<TValue>, TContext>,
 	options?: useAsyncDominoOptions<TContext>,
-): [TValue, SetDominoValue<Promise<TValue>>]
+): [TValue, ReactSetDominoValue<Promise<TValue>>]
 export function useAsyncDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<Promise<TValue>, TContext>,
 	options?: useAsyncDominoOptions<TContext>,
@@ -25,7 +23,7 @@ export function useAsyncDomino<TValue, TContext extends Context>(
 		| CoreDomino<Promise<TValue>, TContext>
 		| TriggerDomino<Promise<TValue>, TContext>,
 	options: useAsyncDominoOptions<TContext> = {},
-): TValue | [TValue, SetDominoValue<Promise<TValue>>] {
+): TValue | [TValue, ReactSetDominoValue<Promise<TValue>>] {
 	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
 	const [promise, setPromise] = useState(dominoUtils.get())

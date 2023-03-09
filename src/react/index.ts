@@ -1,3 +1,5 @@
-export { useAsyncDomino } from './useAsyncDomino'
-export { useDomino } from './useDomino'
-export { useLocalStore } from './useLocalStore'
+export * from './useAsyncDomino'
+export * from './useManagedDomino'
+export * from './useDomino'
+export * from './useLocalStore'
+export * from './types'

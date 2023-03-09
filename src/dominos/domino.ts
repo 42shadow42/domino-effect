@@ -4,7 +4,7 @@ import {
 	ObservableValue,
 	ObservableValueSubscriber,
 } from '../observables'
-import { Store, StoreKey } from '../store'
+import { Store, StoreKey } from './store'
 import {
 	CacheKey,
 	Context,

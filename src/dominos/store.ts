@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
-import { Context } from './dominos/types';
-import { ObservableMap, ObservableValue } from './observables'
+import { Context } from './types';
+import { ObservableMap, ObservableValue } from '../observables'
 
 export type StoreKey = { handle: symbol; context: Context | undefined }
 export class Store extends ObservableMap<Record<StoreKey>, ObservableValue<any>> {}

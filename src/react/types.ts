@@ -1,1 +1,1 @@
-export type SetDominoValue<TValue> = (value: TValue | ((value: TValue) => TValue)) => void
+export type ReactSetDominoValue<TValue> = (value: TValue | ((value: TValue) => TValue)) => void
