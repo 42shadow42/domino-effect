@@ -1,5 +1,5 @@
 import { ObservableCache } from "../observables"
-import { Store } from "../store"
+import { Store } from "./store"
 import { domino } from "./domino"
 import { trigger } from "./trigger"
 
