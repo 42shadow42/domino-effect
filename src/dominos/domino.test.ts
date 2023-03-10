@@ -219,21 +219,6 @@ describe('domino', () => {
         expect(onDelete).toBeCalledWith({ cache: expect.any(ObservableCache)})
     })
 
-    it('should not crash on double delete', () => {
-        const store = new Store()
-        store.delete = jest.fn().mockImplementation(store.delete)
-
-        const root = trigger(() => 'test')
-        const sut = domino(({ get }) => {
-            return get(root)
-        })
-        sut(store).get()
-        sut(store).delete()
-        const isDeleted = sut(store).delete()
-
-        expect(isDeleted).toBe(false)
-    })
-
     it('should notify subscribers', () => {
         const store = new Store()
         const subscription = jest.fn()

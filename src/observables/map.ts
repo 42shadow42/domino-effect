@@ -8,7 +8,6 @@ export type ObservableMapSubscriber<TKey, TValue> = (
 export type ObservableMapIterationCallback<TKey, TValue> = (
 	value: TValue,
 	key: TKey,
-	map: Map<TKey, TValue>,
 ) => void
 
 export class ObservableMap<TKey, TValue> {

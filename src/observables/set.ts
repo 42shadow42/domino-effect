@@ -3,7 +3,7 @@ import { Set as ImmutableSet } from 'immutable'
 export type ObservableSetAction = 'add' | 'remove'
 export type ObservableSetActionData<TValue> = TValue[]
 export type ObservableSetSubscriber<TValue> = (action: ObservableSetAction, values: ObservableSetActionData<TValue>) => void
-export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue, map: ImmutableSet<TValue>) => void
+export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue) => void
 
 export class ObservableSet<TValue> {
     private _set = ImmutableSet<TValue>() 

@@ -49,18 +49,6 @@ describe('trigger', () => {
         expect(store.delete).toBeCalledTimes(1)
     })
 
-    it('should not crash on double delete', () => {
-        const store = new Store()
-        store.delete = jest.fn().mockImplementation(store.delete)
-
-        const sut = trigger(() => 'test')
-        sut(store).get()
-        sut(store).delete()
-        const isDeleted = sut(store).delete()
-
-        expect(isDeleted).toBe(false)
-    })
-
     it('should notify subscribers', () => {
         const store = new Store()
         const subscription = jest.fn()

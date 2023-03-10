@@ -3,7 +3,7 @@ import { Map } from 'immutable'
 export type ObservableCacheAction = 'add' | 'remove'
 export type ObservableCacheActionData<TKey, TValue> = [TKey, TValue][]
 export type ObservableCacheSubscriber<TKey, TValue> = (action: ObservableCacheAction, values: ObservableCacheActionData<TKey, TValue>, expired: boolean) => void
-export type ObservableCacheIterationCallback<TKey, TValue> = (value: TValue, key: TKey, map: Map<TKey, TValue>) => void
+export type ObservableCacheIterationCallback<TKey, TValue> = (value: TValue, key: TKey) => void
 
 export class ObservableCache<TKey, TValue> {
     private _map = Map<TKey, TValue>() 
