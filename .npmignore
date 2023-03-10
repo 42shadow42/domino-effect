@@ -7,7 +7,7 @@ node_modules
 playwright
 playwright-report
 server
-src
+/src
 stories
 storybook-static
 test-results
