@@ -1,4 +1,3 @@
-import { List, Map } from 'immutable'
 import { ObservableCache } from "./cache"
 
 describe('cache', () => {
@@ -143,8 +142,8 @@ describe('cache', () => {
             cache.forEach(tracker)
 
             expect(tracker).toBeCalledTimes(2)
-            expect(tracker).toBeCalledWith('value', 'key', expect.any(Map))
-            expect(tracker).toBeCalledWith('value2', 'key2', expect.any(Map))
+            expect(tracker).toBeCalledWith('value', 'key')
+            expect(tracker).toBeCalledWith('value2', 'key2')
         })
     })
 

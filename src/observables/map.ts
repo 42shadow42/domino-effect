@@ -1,4 +1,3 @@
-import { Map } from 'immutable'
 export type ObservableMapAction = 'add' | 'remove'
 export type ObservableMapActionData<TKey, TValue> = [TKey, TValue][]
 export type ObservableMapSubscriber<TKey, TValue> = (
@@ -11,11 +10,11 @@ export type ObservableMapIterationCallback<TKey, TValue> = (
 ) => void
 
 export class ObservableMap<TKey, TValue> {
-	private _map = Map<TKey, TValue>()
+	private _map = new Map<TKey, TValue>()
 	private _subscribers = new Set<ObservableMapSubscriber<TKey, TValue>>()
 
 	constructor(iterable?: Iterable<[TKey, TValue]>) {
-		this._map = Map<TKey, TValue>(iterable)
+		this._map = new Map<TKey, TValue>(iterable)
 	}
 
 	subscribe(subscriber: ObservableMapSubscriber<TKey, TValue>) {
@@ -32,7 +31,7 @@ export class ObservableMap<TKey, TValue> {
 		}
 
 		const map = this._map
-		this._map = this._map.clear()
+		this._map = new Map<TKey, TValue>()
 		new Set(this._subscribers).forEach((subscriber) => {
 			subscriber('remove', [...map.entries()])
 		})
@@ -40,9 +39,7 @@ export class ObservableMap<TKey, TValue> {
 
 	delete(key: TKey) {
 		const value = this._map.get(key)
-		const newMap = this._map.delete(key)
-		const removed = this._map.size !== newMap.size
-		this._map = newMap
+		const removed = this._map.delete(key)
 
 		if (removed) {
 			new Set(this._subscribers).forEach((subscriber) => {
@@ -57,7 +54,7 @@ export class ObservableMap<TKey, TValue> {
 			return
 		}
 
-		this._map = this._map.set(key, value)
+		this._map.set(key, value)
 		new Set(this._subscribers).forEach((subscriber) => {
 			subscriber('add', [[key, value]])
 		})
@@ -67,7 +64,7 @@ export class ObservableMap<TKey, TValue> {
 		return this._map.entries()
 	}
 	forEach(callback: ObservableMapIterationCallback<TKey, TValue>) {
-		this._map.forEach(callback)
+		this._map.forEach((value, key) => callback(value, key))
 	}
 	get(key: TKey) {
 		return this._map.get(key)

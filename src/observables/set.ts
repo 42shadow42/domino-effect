@@ -1,16 +1,14 @@
-import { Set as ImmutableSet } from 'immutable'
-
 export type ObservableSetAction = 'add' | 'remove'
 export type ObservableSetActionData<TValue> = TValue[]
 export type ObservableSetSubscriber<TValue> = (action: ObservableSetAction, values: ObservableSetActionData<TValue>) => void
 export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue) => void
 
 export class ObservableSet<TValue> {
-    private _set = ImmutableSet<TValue>() 
+    private _set = new Set<TValue>() 
     private _subscribers = new Set<ObservableSetSubscriber<TValue>>()
 
     constructor(iterable?: Iterable<TValue>) {
-        this._set = ImmutableSet<TValue>(iterable)
+        this._set = new Set<TValue>(iterable)
     }
 
     subscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
@@ -27,16 +25,14 @@ export class ObservableSet<TValue> {
         }
 
         const set = this._set
-        this._set = set.clear()
+        this._set = new Set<TValue>()
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('remove', [...set.values()])
         })
     }
 
     delete = (value: TValue) => {
-		const newSet = this._set.delete(value)
-		const removed = this._set.size !== newSet.size
-		this._set = newSet
+		const removed = this._set.delete(value)
 
 		if (removed) {
 			new Set(this._subscribers).forEach((subscriber) => {
@@ -51,14 +47,14 @@ export class ObservableSet<TValue> {
             return
         }
         
-        this._set = this._set.add(value)
+        this._set.add(value)
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('add', [value])
         })
     }
 
     entries = () => this._set.entries()
-    forEach = (callback: ObservableSetIterationCallback<TValue>) => this._set.forEach(callback)
+    forEach = (callback: ObservableSetIterationCallback<TValue>) => this._set.forEach((value, value2) => callback(value, value2))
     has = (key: TValue) => this._set.has(key)
     keys = () => this._set.keys()
     values = () => this._set.values()

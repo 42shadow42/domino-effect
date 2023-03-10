@@ -1,18 +1,8 @@
-import { List, Record, Collection, Map, Set, OrderedMap, OrderedSet, Stack, Seq } from 'immutable'
 import { ObservableCache } from 'src/observables/cache'
 import { ObservableValueSubscriber } from '../observables'
 import { Store } from './store'
 
 export type Context =
-	| List<any>
-	| Record<object>
-	| Collection<any, any>
-	| Map<any, any>
-	| Set<any>
-	| OrderedMap<any, any>
-	| OrderedSet<any>
-	| Stack<any>
-	| Seq<any, any>
 	| string
 	| boolean
 	| number

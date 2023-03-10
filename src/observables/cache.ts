@@ -1,21 +1,19 @@
-import { Map } from 'immutable'
-
 export type ObservableCacheAction = 'add' | 'remove'
 export type ObservableCacheActionData<TKey, TValue> = [TKey, TValue][]
 export type ObservableCacheSubscriber<TKey, TValue> = (action: ObservableCacheAction, values: ObservableCacheActionData<TKey, TValue>, expired: boolean) => void
 export type ObservableCacheIterationCallback<TKey, TValue> = (value: TValue, key: TKey) => void
 
 export class ObservableCache<TKey, TValue> {
-    private _map = Map<TKey, TValue>() 
-    private _timeouts = Map<TKey, NodeJS.Timeout>()
+    private _map = new Map<TKey, TValue>() 
+    private _timeouts = new Map<TKey, NodeJS.Timeout>()
     private _subscribers = new Set<ObservableCacheSubscriber<TKey, TValue>>()
     private _ttl: number;
 
     constructor(ttl: number, iterable?: Iterable<[TKey, TValue]>) {
         this._ttl = ttl
-        this._map = Map<TKey, TValue>(iterable)
+        this._map = new Map<TKey, TValue>(iterable)
         if (ttl > 0) {
-            this._timeouts = Map<TKey, NodeJS.Timeout>([...(iterable || [])].map(([key]) => [key, setTimeout(() => {
+            this._timeouts = new Map<TKey, NodeJS.Timeout>([...(iterable || [])].map(([key]) => [key, setTimeout(() => {
                 this.delete(key, true)
             }, ttl)]))
         }
@@ -35,7 +33,7 @@ export class ObservableCache<TKey, TValue> {
         }
 
         const map = this._map
-        this._map = map.clear()
+        this._map = new Map<TKey,TValue>()
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('remove', [...map.entries()], false)
         })
@@ -43,9 +41,7 @@ export class ObservableCache<TKey, TValue> {
 
     delete(key: TKey, expired: boolean = false) {
         const value = this._map.get(key)
-		const newMap = this._map.delete(key)
-		const removed = this._map.size !== newMap.size
-		this._map = newMap
+        const removed = this._map.delete(key)
 
         if (removed) {
             clearTimeout(this._timeouts.get(key))
@@ -68,14 +64,14 @@ export class ObservableCache<TKey, TValue> {
 			return
 		}
 
-		this._map = this._map.set(key, value)
+        this._map.set(key, value)
         new Set(this._subscribers).forEach((subscriber) => {
             subscriber('add', [[key, value]], false)
         })
     }
 
     entries() { return this._map.entries() }
-    forEach(callback: ObservableCacheIterationCallback<TKey, TValue>) { this._map.forEach(callback) }
+    forEach(callback: ObservableCacheIterationCallback<TKey, TValue>) { this._map.forEach((value, key) => callback(value, key)) }
     get(key: TKey) { return this._map.get(key) }
     has(key: TKey) { return this._map.has(key) }
     keys() { return this._map.keys() }

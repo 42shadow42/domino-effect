@@ -1,4 +1,3 @@
-import { Set } from 'immutable'
 import { ObservableSet } from "./set"
 
 
@@ -126,8 +125,8 @@ describe('map', () => {
             set.forEach(tracker)
 
             expect(tracker).toBeCalledTimes(2)
-            expect(tracker).toBeCalledWith('value', 'value', expect.any(Set))
-            expect(tracker).toBeCalledWith('value2', 'value2', expect.any(Set))
+            expect(tracker).toBeCalledWith('value', 'value')
+            expect(tracker).toBeCalledWith('value2', 'value2')
         })
     })
 
