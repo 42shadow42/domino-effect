@@ -129,19 +129,19 @@ describe('store', () => {
 			const key: StoreKey = [symbol, undefined]
 
 			sut.set(key, stored)
-            sut.delete(key)
+			sut.delete(key)
 
 			expect(sut.has(key)).toBe(false)
 		})
 
-        it('should delete values with context', () => {
+		it('should delete values with context', () => {
 			const sut = new Store()
 			const symbol = Symbol()
 			const stored = createStoredDomino()
 			const key: StoreKey = [symbol, 'test']
 
 			sut.set(key, stored)
-            sut.delete(key)
+			sut.delete(key)
 
 			expect(sut.has(key)).toBe(false)
 		})
@@ -155,7 +155,7 @@ describe('store', () => {
 
 			sut.set(key1, stored)
 			sut.set(key2, stored)
-            sut.delete(key1)
+			sut.delete(key1)
 
 			expect(sut.has(key2)).toBe(true)
 		})
@@ -180,34 +180,34 @@ describe('store', () => {
 		})
 
 		it('should not crash on delete missing value with no context', () => {
-            const sut = new Store()
+			const sut = new Store()
 			const symbol = Symbol()
 			const key: StoreKey = [symbol, undefined]
 
-            sut.delete(key)
+			sut.delete(key)
 		})
 
-        it('should not crash on delete missing value with context', () => {
-            const sut = new Store()
+		it('should not crash on delete missing value with context', () => {
+			const sut = new Store()
 			const symbol = Symbol()
 			const key: StoreKey = [symbol, 'test']
 
-            sut.delete(key)
+			sut.delete(key)
 		})
 
 		it('should track size', () => {
 			const sut = new Store()
-            const stored = createStoredDomino()
+			const stored = createStoredDomino()
 
 			expect(sut.size).toBe(0)
 
-            const symbol1 = Symbol()
+			const symbol1 = Symbol()
 			const key1: StoreKey = [symbol1, 'test']
 			sut.set(key1, stored)
 
 			expect(sut.size).toBe(1)
 
-            const symbol2 = Symbol()
+			const symbol2 = Symbol()
 			const key2: StoreKey = [symbol2, 'test']
 			sut.set(key2, stored)
 
@@ -216,9 +216,9 @@ describe('store', () => {
 			const key3: StoreKey = [symbol2, undefined]
 			sut.set(key3, stored)
 
-            expect(sut.size).toBe(3)
+			expect(sut.size).toBe(3)
 
-            sut.delete(key3)
+			sut.delete(key3)
 
 			expect(sut.size).toBe(2)
 
@@ -232,23 +232,23 @@ describe('store', () => {
 		})
 
 		it('should iterate entries', () => {
-            const sut = new Store()
+			const sut = new Store()
 
-            const symbol1 = Symbol('symbol1')
+			const symbol1 = Symbol('symbol1')
 			const key1: StoreKey = [symbol1, 'test']
-            const stored1 = createStoredDomino()
+			const stored1 = createStoredDomino()
 
 			sut.set(key1, stored1)
 
-            const symbol2 = Symbol('symbol2')
+			const symbol2 = Symbol('symbol2')
 			const key2: StoreKey = [symbol2, 'test']
-            const stored2 = createStoredDomino()
+			const stored2 = createStoredDomino()
 			sut.set(key2, stored2)
 
 			const key3: StoreKey = [symbol2, undefined]
-            const stored3 = createStoredDomino()
+			const stored3 = createStoredDomino()
 
-            sut.set(key3, stored3)
+			sut.set(key3, stored3)
 
 			const entries = sut.entries()
 			expect(entries.next()).toStrictEqual({
@@ -263,30 +263,30 @@ describe('store', () => {
 				done: false,
 				value: [key3, stored3],
 			})
-            expect(entries.next()).toStrictEqual({
-                done: true,
+			expect(entries.next()).toStrictEqual({
+				done: true,
 				value: undefined,
-            })
+			})
 		})
 
 		it('should iterate keys', () => {
-            const sut = new Store()
+			const sut = new Store()
 
-            const symbol1 = Symbol('symbol1')
+			const symbol1 = Symbol('symbol1')
 			const key1: StoreKey = [symbol1, 'test']
-            const stored1 = createStoredDomino()
+			const stored1 = createStoredDomino()
 
 			sut.set(key1, stored1)
 
-            const symbol2 = Symbol('symbol2')
+			const symbol2 = Symbol('symbol2')
 			const key2: StoreKey = [symbol2, 'test']
-            const stored2 = createStoredDomino()
+			const stored2 = createStoredDomino()
 			sut.set(key2, stored2)
 
 			const key3: StoreKey = [symbol2, undefined]
-            const stored3 = createStoredDomino()
+			const stored3 = createStoredDomino()
 
-            sut.set(key3, stored3)
+			sut.set(key3, stored3)
 
 			const keys = sut.keys()
 			expect(keys.next()).toStrictEqual({
@@ -301,30 +301,30 @@ describe('store', () => {
 				done: false,
 				value: key3,
 			})
-            expect(keys.next()).toStrictEqual({
-                done: true,
+			expect(keys.next()).toStrictEqual({
+				done: true,
 				value: undefined,
-            })
+			})
 		})
 
 		it('should iterate values', () => {
-            const sut = new Store()
+			const sut = new Store()
 
-            const symbol1 = Symbol('symbol1')
+			const symbol1 = Symbol('symbol1')
 			const key1: StoreKey = [symbol1, 'test']
-            const stored1 = createStoredDomino()
+			const stored1 = createStoredDomino()
 
 			sut.set(key1, stored1)
 
-            const symbol2 = Symbol('symbol2')
+			const symbol2 = Symbol('symbol2')
 			const key2: StoreKey = [symbol2, 'test']
-            const stored2 = createStoredDomino()
+			const stored2 = createStoredDomino()
 			sut.set(key2, stored2)
 
 			const key3: StoreKey = [symbol2, undefined]
-            const stored3 = createStoredDomino()
+			const stored3 = createStoredDomino()
 
-            sut.set(key3, stored3)
+			sut.set(key3, stored3)
 
 			const values = sut.values()
 			expect(values.next()).toStrictEqual({
@@ -339,31 +339,31 @@ describe('store', () => {
 				done: false,
 				value: stored3,
 			})
-            expect(values.next()).toStrictEqual({
-                done: true,
+			expect(values.next()).toStrictEqual({
+				done: true,
 				value: undefined,
-            })
+			})
 		})
 
 		it('should forEach', () => {
 			const sut = new Store()
 			const tracker = jest.fn()
 
-            const symbol1 = Symbol('symbol1')
+			const symbol1 = Symbol('symbol1')
 			const key1: StoreKey = [symbol1, 'test']
-            const stored1 = createStoredDomino()
+			const stored1 = createStoredDomino()
 
 			sut.set(key1, stored1)
 
-            const symbol2 = Symbol('symbol2')
+			const symbol2 = Symbol('symbol2')
 			const key2: StoreKey = [symbol2, 'test']
-            const stored2 = createStoredDomino()
+			const stored2 = createStoredDomino()
 			sut.set(key2, stored2)
 
 			const key3: StoreKey = [symbol2, undefined]
-            const stored3 = createStoredDomino()
+			const stored3 = createStoredDomino()
 
-            sut.set(key3, stored3)
+			sut.set(key3, stored3)
 
 			sut.forEach(tracker)
 			expect(tracker).toBeCalledTimes(3)

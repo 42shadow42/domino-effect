@@ -38,18 +38,21 @@ export const mockTrigger = <
 		get: getFn,
 		set: setFn,
 	}
-	return Object.assign((store: Store, context?: TContext): TriggerDominoUtils<
-		TValue,
-		TContext
-	> => {
-		return {
-			delete: () => deleteFn(store, context),
-			subscribe: (callback: ObservableValueSubscriber<TValue>) =>
-				subscribeFn(store, context, callback),
-			unsubscribe: (callback: ObservableValueSubscriber<TValue>) =>
-				unsubscribeFn(store, context, callback),
-			get: () => getFn(store, context),
-			set: (value: TValue) => setFn(store, context, value),
-		}
-	}, metadata)
+	return Object.assign(
+		(
+			store: Store,
+			context?: TContext,
+		): TriggerDominoUtils<TValue, TContext> => {
+			return {
+				delete: () => deleteFn(store, context),
+				subscribe: (callback: ObservableValueSubscriber<TValue>) =>
+					subscribeFn(store, context, callback),
+				unsubscribe: (callback: ObservableValueSubscriber<TValue>) =>
+					unsubscribeFn(store, context, callback),
+				get: () => getFn(store, context),
+				set: (value: TValue) => setFn(store, context, value),
+			}
+		},
+		metadata,
+	)
 }

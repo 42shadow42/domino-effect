@@ -2,7 +2,14 @@
 // @ts-ignore
 import { use } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { CoreDomino, TriggerDomino, Context, isTriggerDomino,  GLOBAL_STORE, Store } from '../dominos'
+import {
+	CoreDomino,
+	TriggerDomino,
+	Context,
+	isTriggerDomino,
+	GLOBAL_STORE,
+	Store,
+} from '../dominos'
 import { ReactSetDominoValue } from './types'
 
 export type useAsyncDominoOptions<TContext> = {
@@ -41,10 +48,16 @@ export function useAsyncDomino<TValue, TContext extends Context>(
 	}, [dominoUtils])
 
 	const setDominoValue = useCallback(
-		(value: Promise<TValue> | ((value: Promise<TValue>) => Promise<TValue>)) => {
+		(
+			value:
+				| Promise<TValue>
+				| ((value: Promise<TValue>) => Promise<TValue>),
+		) => {
 			if (isTriggerDomino(domino)) {
 				if (value instanceof Function) {
-					domino(store, context).set(value(domino(store, context).get()))
+					domino(store, context).set(
+						value(domino(store, context).get()),
+					)
 					return
 				}
 				domino(store, context).set(value)

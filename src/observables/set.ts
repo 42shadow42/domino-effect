@@ -1,37 +1,43 @@
 export type ObservableSetAction = 'add' | 'remove'
 export type ObservableSetActionData<TValue> = TValue[]
-export type ObservableSetSubscriber<TValue> = (action: ObservableSetAction, values: ObservableSetActionData<TValue>) => void
-export type ObservableSetIterationCallback<TValue> = (value: TValue, value2: TValue) => void
+export type ObservableSetSubscriber<TValue> = (
+	action: ObservableSetAction,
+	values: ObservableSetActionData<TValue>,
+) => void
+export type ObservableSetIterationCallback<TValue> = (
+	value: TValue,
+	value2: TValue,
+) => void
 
 export class ObservableSet<TValue> {
-    private _set = new Set<TValue>() 
-    private _subscribers = new Set<ObservableSetSubscriber<TValue>>()
+	private _set = new Set<TValue>()
+	private _subscribers = new Set<ObservableSetSubscriber<TValue>>()
 
-    constructor(iterable?: Iterable<TValue>) {
-        this._set = new Set<TValue>(iterable)
-    }
+	constructor(iterable?: Iterable<TValue>) {
+		this._set = new Set<TValue>(iterable)
+	}
 
-    subscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
-        this._subscribers.add(subscriber)
-    }
+	subscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
+		this._subscribers.add(subscriber)
+	}
 
-    unsubscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
-        this._subscribers.delete(subscriber)
-    }
+	unsubscribe = (subscriber: ObservableSetSubscriber<TValue>) => {
+		this._subscribers.delete(subscriber)
+	}
 
-    clear = () => {
-        if (this._set.size === 0) {
-            return
-        }
+	clear = () => {
+		if (this._set.size === 0) {
+			return
+		}
 
-        const set = this._set
-        this._set = new Set<TValue>()
-        new Set(this._subscribers).forEach((subscriber) => {
-            subscriber('remove', [...set.values()])
-        })
-    }
+		const set = this._set
+		this._set = new Set<TValue>()
+		new Set(this._subscribers).forEach((subscriber) => {
+			subscriber('remove', [...set.values()])
+		})
+	}
 
-    delete = (value: TValue) => {
+	delete = (value: TValue) => {
 		const removed = this._set.delete(value)
 
 		if (removed) {
@@ -40,26 +46,27 @@ export class ObservableSet<TValue> {
 			})
 		}
 		return removed
-    }
+	}
 
-    add = (value: TValue) => {
-        if (this._set.has(value)) {
-            return
-        }
-        
-        this._set.add(value)
-        new Set(this._subscribers).forEach((subscriber) => {
-            subscriber('add', [value])
-        })
-    }
+	add = (value: TValue) => {
+		if (this._set.has(value)) {
+			return
+		}
 
-    entries = () => this._set.entries()
-    forEach = (callback: ObservableSetIterationCallback<TValue>) => this._set.forEach((value, value2) => callback(value, value2))
-    has = (key: TValue) => this._set.has(key)
-    keys = () => this._set.keys()
-    values = () => this._set.values()
+		this._set.add(value)
+		new Set(this._subscribers).forEach((subscriber) => {
+			subscriber('add', [value])
+		})
+	}
 
-    get size() {
-        return this._set.size
-    }
+	entries = () => this._set.entries()
+	forEach = (callback: ObservableSetIterationCallback<TValue>) =>
+		this._set.forEach((value, value2) => callback(value, value2))
+	has = (key: TValue) => this._set.has(key)
+	keys = () => this._set.keys()
+	values = () => this._set.values()
+
+	get size() {
+		return this._set.size
+	}
 }

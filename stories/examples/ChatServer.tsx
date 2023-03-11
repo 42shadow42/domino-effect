@@ -95,7 +95,7 @@ const chatRoom = domino<Promise<ChatRoomControls>, string>(
 			cache.get('socket')?.close?.()
 		},
 	},
-)
+			)
 
 const JoinChat = () => {
 	const [user, setUser] = useDomino(userState)

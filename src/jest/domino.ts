@@ -3,8 +3,8 @@ import {
 	DominoMetadata,
 	Store,
 	Context,
-    CoreDomino,
-    DominoUtils,
+	CoreDomino,
+	DominoUtils,
 } from '../dominos'
 
 export type MockDominoMetadata = {
@@ -20,10 +20,10 @@ export type MockCoreDomino<TValue, TContext extends Context> = CoreDomino<
 > &
 	MockDominoMetadata
 
-export const mockDomino = <
+export const mockDomino = <TValue, TContext extends Context>(): MockCoreDomino<
 	TValue,
-	TContext extends Context,
->(): MockCoreDomino<TValue, TContext> => {
+	TContext
+> => {
 	const deleteFn = jest.fn()
 	const subscribeFn = jest.fn()
 	const unsubscribeFn = jest.fn()
@@ -35,17 +35,17 @@ export const mockDomino = <
 		unsubscribe: unsubscribeFn,
 		get: getFn,
 	}
-	return Object.assign((store: Store, context?: TContext): DominoUtils<
-		TValue,
-		TContext
-	> => {
-		return {
-			delete: () => deleteFn(store, context),
-			subscribe: (callback: ObservableValueSubscriber<TValue>) =>
-				subscribeFn(store, context, callback),
-			unsubscribe: (callback: ObservableValueSubscriber<TValue>) =>
-				unsubscribeFn(store, context, callback),
-			get: () => getFn(store, context),
-		}
-	}, metadata)
+	return Object.assign(
+		(store: Store, context?: TContext): DominoUtils<TValue, TContext> => {
+			return {
+				delete: () => deleteFn(store, context),
+				subscribe: (callback: ObservableValueSubscriber<TValue>) =>
+					subscribeFn(store, context, callback),
+				unsubscribe: (callback: ObservableValueSubscriber<TValue>) =>
+					unsubscribeFn(store, context, callback),
+				get: () => getFn(store, context),
+			}
+		},
+		metadata,
+	)
 }

@@ -4,8 +4,8 @@ import {
 	Context,
 	GLOBAL_STORE,
 	Store,
-    TriggerDominoUtils,
-    DominoUtils,
+	TriggerDominoUtils,
+	DominoUtils,
 } from '../dominos'
 
 export type useManagedDominoOptions<TContext> = {

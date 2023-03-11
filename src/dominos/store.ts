@@ -1,7 +1,7 @@
 import { Context, DominoUtils, TriggerDominoUtils } from './types'
-import { ObservableMap, ObservableValue } from '../observables'
+import { ObservableValue } from '../observables'
 
-export type StoreKey = [Symbol, Context]
+export type StoreKey = [symbol, Context]
 export type StoredDomino = [
 	DominoUtils<any, any> | TriggerDominoUtils<any, any>,
 	ObservableValue<any>,
@@ -19,7 +19,7 @@ export type StoreIterationCallback = (
 ) => void
 
 export class Store {
-	private _map = new Map<Symbol, Map<Context, StoredDomino>>()
+	private _map = new Map<symbol, Map<Context, StoredDomino>>()
 	private _subscribers = new Set<StoreSubscriber>()
 	private _size = 0
 
@@ -70,7 +70,11 @@ export class Store {
 
 	*entries() {
 		const dominos = this._map.entries()
-		for (let domino = dominos.next(); !domino.done; domino = dominos.next() ) {
+		for (
+			let domino = dominos.next();
+			!domino.done;
+			domino = dominos.next()
+		) {
 			const contextualDominos = domino.value[1].entries()
 			for (
 				let contextualDomino = contextualDominos.next();
@@ -87,7 +91,11 @@ export class Store {
 
 	forEach(callback: StoreIterationCallback) {
 		const dominos = this._map.entries()
-		for (let domino = dominos.next(); !domino.done; domino = dominos.next()  ) {
+		for (
+			let domino = dominos.next();
+			!domino.done;
+			domino = dominos.next()
+		) {
 			const contextualDominos = domino.value[1].entries()
 			for (
 				let contextualDomino = contextualDominos.next();
@@ -114,9 +122,17 @@ export class Store {
 
 	*keys() {
 		const dominos = this._map.entries()
-		for (let domino = dominos.next(); !domino.done; domino = dominos.next()) {
+		for (
+			let domino = dominos.next();
+			!domino.done;
+			domino = dominos.next()
+		) {
 			const contextualKeys = domino.value[1].keys()
-			for (let contextKey = contextualKeys.next(); !contextKey.done; contextKey = contextualKeys.next() ) {
+			for (
+				let contextKey = contextualKeys.next();
+				!contextKey.done;
+				contextKey = contextualKeys.next()
+			) {
 				yield [domino.value[0], contextKey.value]
 			}
 		}
@@ -124,7 +140,11 @@ export class Store {
 
 	*values() {
 		const dominos = this._map.entries()
-		for (let domino = dominos.next(); !domino.done; domino = dominos.next()) {
+		for (
+			let domino = dominos.next();
+			!domino.done;
+			domino = dominos.next()
+		) {
 			const contextualValues = domino.value[1].values()
 			for (
 				let contextValue = contextualValues.next();
