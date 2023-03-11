@@ -95,7 +95,7 @@ describe('store', () => {
 			sut.set(key, stored)
 			try {
 				sut.set(key, stored)
-			} catch (error) {
+			} catch (error: any) {
 				expect(error.message).toBe(
 					`Store already has domino with symbol symbol and context undefined`,
 				)
@@ -113,7 +113,7 @@ describe('store', () => {
 			sut.set(key, stored)
 			try {
 				sut.set(key, stored)
-			} catch (error) {
+			} catch (error: any) {
 				expect(error.message).toBe(
 					`Store already has domino with symbol symbol and context test`,
 				)
