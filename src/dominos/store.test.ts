@@ -460,4 +460,4 @@ describe('store', () => {
 			expect(subscriber).toBeCalledTimes(0)
 		})
 	})
-	})
+})
