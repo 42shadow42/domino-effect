@@ -1,5 +1,5 @@
 import { Meta, Story, Source, Canvas } from '@storybook/addon-docs';
-import * as stories from './rules.stories.tsx';
+import * as stories from './rules.index.tsx';
 import { Component } from 'react';
 
 <Meta title="Domino/Rules" component={Component} />
@@ -22,20 +22,12 @@ Dominos are derived from triggers, they exhibit the domino effect and will casca
 </Canvas>
 
 
-## One domino per component
-In order to support asynchronous behaviors within the react rules of hooks, only one domino can be used per component. It also must be the last hook.
-If you need more than one, consider splitting the component or combining dominos. 
-
-### Splitting Components
+## Multiple Dominons
+Prior to react 18.3.0 it was necessary to limit domino usage to a single domino per component.
+Due to the release of the use hook in 18.3.0 this limitation has been lifted, and the rules required Splitting Components or Combining Dominos no longer apply.
 
 <Canvas>
-    <Story story={stories.SplittingComponents} />
-</Canvas>
-
-### Combining Dominos
-
-<Canvas>
-    <Story story={stories.CombiningDominos} />
+    <Story story={stories.MultipleDominos} />
 </Canvas>
 
 ## Select only what you need
@@ -71,7 +63,8 @@ You can use a single domino for multiple values either by providing a context, o
 
 ### Using Context with Dominos
 
-You can pass primitives or immutable's (the package) to access contextual values. This allows you to use local state to pick an instance
+You can pass primitives to access contextual values.
+This allows you to use local state to pick an instance.
 
 <Canvas>
     <Story story={stories.Context} />
@@ -86,5 +79,12 @@ To create a store local to your components use useLocalStore, to avoid memory le
     <Story story={stories.CustomStores} />
 </Canvas>
 
+### Manual Cleanup
 
+Sometimes you create resources that must be cleaned up manual such as web socket connections.
+You can do that using the onDelete callback when configured a sensitive domino.
+Keep in mind the onDelete callback will never be called without a ttl configured as well.
 
+<Canvas>
+    <Story story={stories.ManualCleanup} />
+</Canvas>

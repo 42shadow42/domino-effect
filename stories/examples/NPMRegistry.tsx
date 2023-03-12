@@ -3,12 +3,12 @@ import {
 	ErrorInfo,
 	Fragment,
 	PropsWithChildren,
+	Suspense,
 	useState,
 } from 'react'
 import {
 	domino,
 	trigger,
-	DominoSuspense,
 	useAsyncDomino,
 	useDomino,
 } from '@42shadow42/domino-effect'
@@ -187,20 +187,14 @@ export const NPMRegistry = () => {
 		<Fragment>
 			<SearchField />
 			<ErrorBoundary>
-				<DominoSuspense
-					fallback="loading"
-					props={{ onSelectPackage: handleSelectPackage }}
-				>
-					{SearchResults}
-				</DominoSuspense>
+				<Suspense fallback="loading">
+					<SearchResults onSelectPackage={handleSelectPackage} />
+				</Suspense>
 			</ErrorBoundary>
 			{selectedPackage && (
-				<DominoSuspense
-					fallback="loading"
-					props={{ value: selectedPackage }}
-				>
-					{ResultsEditor}
-				</DominoSuspense>
+				<Suspense fallback="loading">
+					<ResultsEditor value={selectedPackage} />
+				</Suspense>
 			)}
 		</Fragment>
 	)

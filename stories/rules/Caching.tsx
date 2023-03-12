@@ -23,25 +23,19 @@ const expiring = domino(
 	{ ttl: 1000 },
 )
 
-const combined = domino(({ get, manage }) => {
-	return {
-		core: manage(core),
-		cached: get(cached),
-		expiring: get(expiring),
-	}
-})
-
 export const Caching = () => {
-	const value = useDomino(combined)
+	const cachedValue = useDomino(cached)
+	const expiringValue = useDomino(expiring)
+	const [coreValue, setCoreValue] = useDomino(core)
 	return (
 		<Fragment>
-			<h4 aria-label="Cached">{value.cached}</h4>
-			<h5 aria-label="Expiring">{value.expiring}</h5>
+			<h4 aria-label="Cached">{cachedValue}</h4>
+			<h5 aria-label="Expiring">{expiringValue}</h5>
 			<input
 				aria-label="Core"
 				type="text"
-				value={value.core.value}
-				onChange={(evt) => value.core.set(evt.target.value)}
+				value={coreValue}
+				onChange={(evt) => setCoreValue(evt.target.value)}
 			/>
 		</Fragment>
 	)

@@ -2,11 +2,13 @@
 .storybook
 .vscode
 coverage
+lib/**/*.test.ts
 lib/stories
 node_modules
 playwright
 playwright-report
-src
+server
+/src
 stories
 storybook-static
 test-results

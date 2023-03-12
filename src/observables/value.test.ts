@@ -1,9 +1,9 @@
 import { ObservableValue } from './value'
 
 describe('value', () => {
-    afterEach(() => {
-        jest.clearAllMocks()
-    })
+	afterEach(() => {
+		jest.clearAllMocks()
+	})
 
 	it('should initialize', () => {
 		const value = new ObservableValue('value')
@@ -29,11 +29,11 @@ describe('value', () => {
 		expect(subscriber).lastCalledWith('value2')
 	})
 
-    it('should publish async', async () => {
+	it('should publish async', async () => {
 		const value = new ObservableValue(Promise.resolve('value'))
 		const subscriber = jest.fn()
 		value.subscribe(subscriber)
-		
+
 		value.set(Promise.resolve('value2'))
 
 		await new Promise(process.nextTick)
@@ -41,18 +41,18 @@ describe('value', () => {
 		await expect(subscriber.mock.calls[0][0]).resolves.toBe('value2')
 	})
 
-    it('should publish only latest async', async () => {
-        let resolver: (value: string) => void
+	it('should publish only latest async', async () => {
+		let resolver: (value: string) => void
 		const value = new ObservableValue(Promise.resolve('value'))
 		const subscriber = jest.fn()
 		value.subscribe(subscriber)
-		
-        value.set(new Promise((resolve) => resolver = resolve))
+
+		value.set(new Promise((resolve) => (resolver = resolve)))
 		value.set(Promise.resolve('value2'))
 
-        // new Promise() is synchronous so this is always defined
-        // @ts-ignore
-        resolver('value3')
+		// new Promise() is synchronous so this is always defined
+		// @ts-ignore
+		resolver('value3')
 
 		await new Promise(process.nextTick)
 		expect(subscriber).toBeCalledTimes(1)

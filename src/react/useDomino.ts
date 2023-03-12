@@ -1,27 +1,32 @@
-import { CoreDomino, TriggerDomino } from '../dominos'
 import { useCallback, useEffect, useState } from 'react'
-import { isTriggerDomino } from '../dominos/types'
-import { GLOBAL_STORE, Store } from '..'
+import {
+	CoreDomino,
+	TriggerDomino,
+	Context,
+	isTriggerDomino,
+	GLOBAL_STORE,
+	Store,
+} from '../dominos'
+import { ReactSetDominoValue } from './types'
 
-export type SetDominoValue<TValue> = (value: TValue) => void
 export type useDominoOptions<TContext> = {
 	store?: Store
 	context?: TContext
 }
 
-export function useDomino<TValue, TContext = undefined>(
+export function useDomino<TValue, TContext extends Context>(
 	domino: TriggerDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
-): [TValue, SetDominoValue<TValue>]
-export function useDomino<TValue, TContext>(
+): [TValue, ReactSetDominoValue<TValue>]
+export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
 ): TValue
-export function useDomino<TValue, TContext>(
+export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
 	options: useDominoOptions<TContext> = {},
-): TValue | [TValue, SetDominoValue<TValue>] {
-	const { store = GLOBAL_STORE, context = undefined } = options
+): TValue | [TValue, ReactSetDominoValue<TValue>] {
+	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
 	const [value, setValue] = useState(dominoUtils.get())
 
@@ -36,12 +41,18 @@ export function useDomino<TValue, TContext>(
 	}, [dominoUtils])
 
 	const setDominoValue = useCallback(
-		(value: TValue) => {
+		(value: TValue | ((value: TValue) => TValue)) => {
 			if (isTriggerDomino(domino)) {
-				domino(store).set(value)
+				if (value instanceof Function) {
+					domino(store, context).set(
+						value(domino(store, context).get()),
+					)
+					return
+				}
+				domino(store, context).set(value)
 			}
 		},
-		[domino],
+		[domino, store, context],
 	)
 
 	if (isTriggerDomino(domino)) {

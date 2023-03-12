@@ -45,6 +45,8 @@ test.describe('Context', () => {
         const contextInput = story.getByRole('textbox', { name: /^context$/i })
         await contextInput.fill('Context')
 
+        await expect(contextInput).toHaveValue('Context')
+
         const contextualValueInput = story.getByRole('textbox', { name: /^contextual value$/i })
         await contextualValueInput.fill('Contextual value')
 

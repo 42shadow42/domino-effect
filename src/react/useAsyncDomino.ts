@@ -1,79 +1,72 @@
-import { CoreDomino, TriggerDomino } from '../dominos'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { isTriggerDomino, SetDominoValue } from '../dominos/types'
-import { GLOBAL_STORE, Store } from '..'
+// use not yet typed
+// @ts-ignore
+import { use } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import {
+	CoreDomino,
+	TriggerDomino,
+	Context,
+	isTriggerDomino,
+	GLOBAL_STORE,
+	Store,
+} from '../dominos'
+import { ReactSetDominoValue } from './types'
 
 export type useAsyncDominoOptions<TContext> = {
 	store?: Store
 	context?: TContext
 }
 
-export function useAsyncDomino<TValue, TContext>(
+export function useAsyncDomino<TValue, TContext extends Context>(
 	domino: TriggerDomino<Promise<TValue>, TContext>,
 	options?: useAsyncDominoOptions<TContext>,
-): [TValue, SetDominoValue<Promise<TValue>>]
-export function useAsyncDomino<TValue, TContext>(
+): [TValue, ReactSetDominoValue<Promise<TValue>>]
+export function useAsyncDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<Promise<TValue>, TContext>,
 	options?: useAsyncDominoOptions<TContext>,
 ): TValue
-export function useAsyncDomino<TValue, TContext>(
+export function useAsyncDomino<TValue, TContext extends Context>(
 	domino:
 		| CoreDomino<Promise<TValue>, TContext>
 		| TriggerDomino<Promise<TValue>, TContext>,
 	options: useAsyncDominoOptions<TContext> = {},
-): TValue | [TValue, SetDominoValue<Promise<TValue>>] {
-	const { store = GLOBAL_STORE, context = undefined } = options
+): TValue | [TValue, ReactSetDominoValue<Promise<TValue>>] {
+	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
-	const promise = useMemo(() => {
-		return dominoUtils.get()
-	}, [dominoUtils])
-	const promiseRef = useRef<Promise<TValue>>(promise)
-	const [value, setValue] = useState<TValue>()
-	const [error, setError] = useState<any>()
+	const [promise, setPromise] = useState(dominoUtils.get())
 
 	const subscriber = useCallback(
 		async (promise: Promise<TValue>) => {
-			promiseRef.current = promise
-			try {
-				const value = await promise
-				if (promiseRef.current === promise) {
-					setValue(value)
-				}
-			} catch (error) {
-				if (promiseRef.current === promise) {
-					setError(error)
-				}
-			}
+			setPromise(promise)
 		},
-		[setValue, setError],
+		[setPromise],
 	)
 
 	useEffect(() => {
 		dominoUtils.subscribe(subscriber)
 		return () => dominoUtils.unsubscribe(subscriber)
-	}, [dominoUtils, setValue, promiseRef])
-
-	useEffect(() => {
-		subscriber(promise)
 	}, [dominoUtils])
 
 	const setDominoValue = useCallback(
-		(value: Promise<TValue>) => {
+		(
+			value:
+				| Promise<TValue>
+				| ((value: Promise<TValue>) => Promise<TValue>),
+		) => {
 			if (isTriggerDomino(domino)) {
-				domino(store).set(value)
+				if (value instanceof Function) {
+					domino(store, context).set(
+						value(domino(store, context).get()),
+					)
+					return
+				}
+				domino(store, context).set(value)
 			}
 		},
 		[domino],
 	)
 
-	if (error !== undefined) {
-		throw error
-	}
-
-	if (value === undefined) {
-		throw promiseRef.current
-	}
-
+	const value = use(promise)
 	if (isTriggerDomino(domino)) {
 		return [value, setDominoValue]
 	}

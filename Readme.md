@@ -4,6 +4,9 @@ A simple state management framework for react that relies on core triggers to ca
 
 See the storybook at [Domino Effect](https://42shadow42.github.io/domino-effect/) for examples and documentation.
 
+## Disclaimer:
+### This version of domino effect currently relies on an unreleased version of react, it has significant changes from the previous version because of those changes. Because of those changes, I would not recommend developing against this library until react's next minor or larger release ^18.3.0.
+
 ## Getting Started
 
 Domino-Effect is simple to get started with, it's all bundled in one small package for easy installation.

@@ -1,40 +1,33 @@
-import { Map, List, Record } from 'immutable'
 import {
 	ObservableCache,
 	ObservableValue,
 	ObservableValueSubscriber,
 } from '../observables'
-import { Store } from '../store'
+import { Store, StoreKey } from './store'
 import {
 	Context,
 	CoreDomino,
 	DominoEffectCalculation,
 	DominoEffectSettings,
 	DominoMetadata,
-	DominoUtils,
 	TriggerDomino,
 } from './types'
 
-export const domino = <TValue, TContext extends Context>(
+export const domino = <TValue, TContext extends Context = undefined>(
 	calculation: DominoEffectCalculation<TValue, TContext>,
 	settings: DominoEffectSettings = {},
 ): CoreDomino<TValue, TContext> => {
 	const handle = Symbol()
 
-	const { debugLabel, ttl } = settings
+	const { debugLabel, ttl, onDelete } = settings
 	const metadata: DominoMetadata = { type: 'standard' }
 
-	let utilCache =
-		Map<Record<{store: Store<Context>, context: TContext | undefined }>, DominoUtils<TValue, TContext>>()
+	return Object.assign((store: Store, context?: TContext) => {
+		const storeKey: StoreKey = [handle, context]
 
-	return Object.assign((store: Store<any>, context?: TContext) => {
-		const cacheKey = Record({ store, context })()
-
-		if (utilCache.has(cacheKey)) {
-			return utilCache.get(cacheKey)!
+		if (store.has(storeKey)) {
+			return store.get(storeKey)![0]
 		}
-
-		const storeKey = Record({ handle, context })()
 
 		const cache = new ObservableCache<any, any>(settings.ttl || 0)
 
@@ -48,12 +41,14 @@ export const domino = <TValue, TContext extends Context>(
 			// Users may interact with the cache during calculation so...
 			// Don't listen to subscriptions during calculation.
 			cache.unsubscribe(subscription)
-			store.get(storeKey)?.set(calculation(utils, context))
+			store.get(storeKey)?.[1]?.set(calculation(utils, context))
 			cache.subscribe(subscription)
 		}
 
 		const utils = {
-			get: <TValue, TContext extends Context>(source: CoreDomino<TValue, TContext>) => {
+			get: <TValue, TContext extends Context>(
+				source: CoreDomino<TValue, TContext>,
+			) => {
 				const domino = source(store)
 				_dependencies.add(source)
 				domino.subscribe(subscription)
@@ -78,51 +73,40 @@ export const domino = <TValue, TContext extends Context>(
 		let gcTimeout: NodeJS.Timeout
 		const dominoUtils = {
 			subscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
-				if (!store.has(storeKey)) {
-					store.set(
-						storeKey,
-						new ObservableValue(calculation(utils, context)),
-					)
-					cache.subscribe(subscription)
-				}
-				store.get(storeKey)!.subscribe(subscriber)
+				store.get(storeKey)![1].subscribe(subscriber)
 				clearTimeout(gcTimeout)
 			},
 			unsubscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
-				if (!store.has(storeKey)) {
-					return
-				}
-				const count = store.get(storeKey)!.unsubscribe(subscriber)
+				const count = store.get(storeKey)![1].unsubscribe(subscriber)
 				if (count === 0 && ttl !== undefined) {
-                    gcTimeout = setTimeout(() => {
-                        dominoUtils.delete()
-                    }, ttl)
-                }
+					gcTimeout = setTimeout(() => {
+						dominoUtils.delete()
+					}, ttl)
+				}
 			},
 			get: () => {
-				if (!store.has(storeKey)) {
-					store.set(
-						storeKey,
-						new ObservableValue(calculation(utils, context)),
-					)
-					cache.subscribe(subscription)
-				}
-				// private handle ensures the type will always be of TValue
-				return store.get(storeKey)!.get()
+				return store.get(storeKey)![1].get()
 			},
 			delete: () => {
 				new Set(_dependencies).forEach((dependency) =>
 					dependency(store).unsubscribe(subscription),
 				)
+
+				onDelete?.({ cache })
 				cache.unsubscribe(subscription)
-				cache.delete(store)
+				cache.clear()
+
 				return store.delete(storeKey)
 			},
 			debugLabel,
 		}
 
-		utilCache = utilCache.set(cacheKey, dominoUtils)
+		store.set(storeKey, [
+			dominoUtils,
+			new ObservableValue(calculation(utils, context)),
+		])
+		cache.subscribe(subscription)
 
-		return utilCache.get(cacheKey)!
+		return store.get(storeKey)![0]
 	}, metadata)
 }

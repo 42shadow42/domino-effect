@@ -1,6 +1,5 @@
-import { Map, Record } from 'immutable'
 import { ObservableValue, ObservableValueSubscriber } from '../observables'
-import { Store } from '../store'
+import { Store, StoreKey } from './store'
 import {
 	Context,
 	CoreDominoSettings,
@@ -9,65 +8,45 @@ import {
 	TriggerDominoUtils,
 } from './types'
 
-export const trigger = <TValue, TContext extends Context>(
+export const trigger = <TValue, TContext extends Context = undefined>(
 	factory: (context?: TContext) => TValue,
 	settings: CoreDominoSettings = {},
 ): TriggerDomino<TValue, TContext> => {
 	const handle = Symbol()
 
 	const { debugLabel, ttl } = settings
-
-	let cache =
-		Map<
-			Record<{ store: Store<Context>; context: TContext | undefined }>,
-			TriggerDominoUtils<TValue, TContext>
-		>()
 	const metadata: DominoMetadata = { type: 'trigger' }
 
-	return Object.assign((store: Store<any>, context?: TContext) => {
-		const cacheKey = Record({ store, context })()
-		if (cache.has(cacheKey)) {
-			return cache.get(cacheKey)!
+	return Object.assign((store: Store, context?: TContext) => {
+		const storeKey: StoreKey = [handle, context]
+
+		if (store.has(storeKey)) {
+			// Because the store key includes the handle we know its a trigger domino
+			return store.get(storeKey)![0] as TriggerDominoUtils<
+				TValue,
+				TContext
+			>
 		}
-		const storeKey = Record({ handle, context })()
 
 		let gcTimeout: NodeJS.Timeout
 		const utils: TriggerDominoUtils<TValue, TContext> = Object.assign(
 			{
 				get: () => {
-					if (!store.has(storeKey)) {
-						store.set(
-							storeKey,
-							new ObservableValue(factory(context)),
-						)
-					}
-					// private handle ensures the type will always be of TValue
-					return store.get(storeKey)!.get()
+					return store.get(storeKey)![1].get()
 				},
 				set: (value: TValue) => {
-					if (!store.has(storeKey)) {
-						store.set(storeKey, new ObservableValue(value))
-					}
-					// private handle ensures the type will always be of TValue
-					store.get(storeKey)!.set(value)
+					store.get(storeKey)![1].set(value)
 				},
 				subscribe: (subscriber: ObservableValueSubscriber<TValue>) => {
-					if (!store.has(storeKey)) {
-						store.set(
-							storeKey,
-							new ObservableValue(factory(context)),
-						)
-					}
-					store.get(storeKey)!.subscribe(subscriber)
+					store.get(storeKey)![1].subscribe(subscriber)
 					clearTimeout(gcTimeout)
 				},
 				unsubscribe: (
 					subscriber: ObservableValueSubscriber<TValue>,
 				) => {
-					if (!store.has(storeKey)) {
-						return
-					}
-					const count = store.get(storeKey)!.unsubscribe(subscriber)
+					const count = store
+						.get(storeKey)![1]
+						.unsubscribe(subscriber)
 					if (count === 0 && ttl !== undefined) {
 						gcTimeout = setTimeout(() => {
 							utils.delete()
@@ -75,18 +54,16 @@ export const trigger = <TValue, TContext extends Context>(
 					}
 				},
 				delete: () => {
-					const newCache = cache.delete(cacheKey)
-					const deleted = newCache.size !== cache.size
-					cache = newCache
-					return store.delete(storeKey) && deleted
+					return store.delete(storeKey)
 				},
 				debugLabel,
 			},
 			metadata,
 		)
 
-		cache = cache.set(cacheKey, utils)
+		store.set(storeKey, [utils, new ObservableValue(factory(context))])
 
-		return cache.get(cacheKey)!
+		// Because the store key includes the handle we know its a trigger domino
+		return store.get(storeKey)![0] as TriggerDominoUtils<TValue, TContext>
 	}, metadata)
 }
