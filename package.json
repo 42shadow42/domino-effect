@@ -76,8 +76,10 @@
   },
   "dependencies": {
     "is-promise": "^4.0.0",
-    "lodash.isequal": "^4.5.0",
-    "react": "^18.3.0-next-b72ed698f-20230303",
-    "react-dom": "^18.3.0-next-b72ed698f-20230303"
+    "lodash.isequal": "^4.5.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0-next-a8875eab7-20230310",
+    "react-dom": "^18.3.0-next-a8875eab7-20230310"
   }
 }

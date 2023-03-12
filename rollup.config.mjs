@@ -11,14 +11,12 @@ export default {
 			dir: 'lib/cjs',
 			format: 'cjs',
 			exports: 'named',
-			sourcemap: true,
 			preserveModules: true,
 		},
 		{
 			dir: 'lib/es',
 			format: 'es',
 			exports: 'named',
-			sourcemap: true,
 			preserveModules: true,
 		},
 	],
@@ -31,7 +29,12 @@ export default {
 		}),
 		commonjs(),
 		terser({
+			mangle: {
+				toplevel: true,
+			},
 			compress: {
+				top_retain: ['src/index.ts'], 
+				toplevel: true,
 				pure_getters: true,
 				unsafe: true,
 				unsafe_comps: true,

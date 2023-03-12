@@ -5,13 +5,13 @@
 import { Fragment, useEffect } from 'react'
 import { useDomino, useManagedDomino } from '../react'
 import { Store } from '../dominos'
-import { core } from './dominos'
+import { core } from './__utils__/dominos'
 import { render, cleanup } from '@testing-library/react'
 import { core as mock } from './__mocks__/dominos'
 
 jest.useFakeTimers()
 
-jest.mock('./dominos', () => require('./__mocks__/dominos'))
+jest.mock('./__utils__/dominos', () => require('./__mocks__/dominos'))
 
 describe('mockDomino', () => {
 	const Component = () => {
