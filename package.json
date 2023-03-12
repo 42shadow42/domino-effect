@@ -1,6 +1,6 @@
 {
   "name": "@42shadow42/domino-effect",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Reactive state management framework",
   "main": "lib/cjs/index.js",
   "module": "lib/es/index.js",
