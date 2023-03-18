@@ -28,7 +28,7 @@ export function useDomino<TValue, TContext extends Context>(
 ): TValue | [TValue, ReactSetDominoValue<TValue>] {
 	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
-	const [value, setValue] = useState(dominoUtils.get())
+	const [value, setValue] = useState(() => dominoUtils.get())
 
 	useEffect(() => {
 		const subscriber = (value: TValue) => setValue(value)
@@ -37,7 +37,7 @@ export function useDomino<TValue, TContext extends Context>(
 	}, [dominoUtils, setValue])
 
 	useEffect(() => {
-		setValue(dominoUtils.get())
+		setValue(() => dominoUtils.get())
 	}, [dominoUtils])
 
 	const setDominoValue = useCallback(

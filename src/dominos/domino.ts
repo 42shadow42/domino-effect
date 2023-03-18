@@ -48,8 +48,9 @@ export const domino = <TValue, TContext extends Context = undefined>(
 		const utils = {
 			get: <TValue, TContext extends Context>(
 				source: CoreDomino<TValue, TContext>,
+				context?: TContext,
 			) => {
-				const domino = source(store)
+				const domino = source(store, context) 
 				_dependencies.add(source)
 				domino.subscribe(subscription)
 				return domino.get()

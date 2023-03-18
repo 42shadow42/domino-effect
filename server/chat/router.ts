@@ -9,7 +9,7 @@ const broadcastMessage = (chatRoom: ChatRoom, message: ChatMessage) => {
     chatRoom.sockets.forEach((ws) => {
         ws.send(JSON.stringify({
             signal: 'message',
-            message,
+            data: message,
         }))
     })
 }
@@ -17,7 +17,7 @@ const broadcastJoinEvent = (chatRoom: ChatRoom, user: string) => {
     chatRoom.sockets.forEach((ws) => {
         ws.send(JSON.stringify({
             signal: 'user_join',
-            user,
+            data: user,
         }))
     })
 }
@@ -25,7 +25,7 @@ const broadcastLeaveEvent = (chatRoom: ChatRoom, user: string) => {
     chatRoom.sockets.forEach((ws) => {
         ws.send(JSON.stringify({
             signal: 'user_leave',
-            user,
+            data: user,
         }))
     })
 }
