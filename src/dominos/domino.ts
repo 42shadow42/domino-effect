@@ -103,6 +103,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 				// We are explicitly triggering a refresh with an empty cache here
 				// Don't listen to subscriptions during cache.clear() we will run the refresh manually
 				cache.unsubscribe(refresh)
+				onDelete?.({ cache })
 				cache.clear()
 				refresh()
 			},

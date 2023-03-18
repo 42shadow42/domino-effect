@@ -7,13 +7,6 @@ const core = trigger(async () => ({
 	target: 'world!',
 }))
 
-const manager = domino(async ({ get, manage }) => {
-	return {
-		values: await get(core),
-		manage: manage(core),
-	}
-})
-
 const splitGreeting = domino(async ({ get }) => {
 	const value = await get(core)
 	action('split greeting evaulated')(value.greeting)

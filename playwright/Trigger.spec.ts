@@ -8,13 +8,15 @@ test.describe('Trigger', () => {
 		await expect(page).toHaveTitle(/Domino \/ Rules - Trigger/i)
 	})
 
-    test('can edit trigger value', async ({ page }) => {
-        await page.goto('?path=/story/domino-rules--trigger')
-        const story = page.frameLocator('iframe[title="storybook-preview-iframe"]')
+	test('can edit trigger value', async ({ page }) => {
+		await page.goto('?path=/story/domino-rules--trigger')
+		const story = page.frameLocator(
+			'iframe[title="storybook-preview-iframe"]',
+		)
 
-        const input = story.getByRole('textbox', { name: /trigger/i })
-        await input.fill('Playwright testing')
+		const input = story.getByRole('textbox', { name: /trigger/i })
+		await input.fill('Playwright testing')
 
-        expect(await input.inputValue()).toBe('Playwright testing')
-    })
+		expect(await input.inputValue()).toBe('Playwright testing')
+	})
 })

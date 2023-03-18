@@ -1,10 +1,9 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { domino, trigger, useDomino } from '@42shadow42/domino-effect'
-import { action } from '@storybook/addon-actions'
 
 const core = trigger(() => 'Hello world')
 
-const sensitive = domino(
+const refreshable = domino(
 	({ get, cache }) => {
 		const value = get(core)
 		if (!cache.has('counter')) {
@@ -14,24 +13,25 @@ const sensitive = domino(
 		return `Value: ${value}! Changed ${cache.get('counter')} times!`
 	},
 	{
-		ttl: 0,
 		onDelete: ({ cache }) => {
 			// Note: cache.delete('counter') is redundant here because the cache is automatically cleared onDelete.
 			// The example here is just for illustration purposes.
 			cache.delete('counter')
-			action('cleanup')()
 		},
 	},
 )
 
 const DisplayValue = () => {
-	const [sensitiveValue] = useDomino(sensitive)
-	return <h4 aria-label="Display Value">{sensitiveValue}</h4>
+	const [refreshableValue, refresh] = useDomino(refreshable)
+	return (
+		<Fragment>
+			<h4 aria-label="Display Value">{refreshableValue}</h4>
+			<button onClick={refresh}>Refresh</button>
+		</Fragment>
+	)
 }
 
-export const ManualCleanup = () => {
-	const [visible, setVisible] = useState(true)
-	const buttonText = visible ? 'Hide' : 'Show'
+export const Refresh = () => {
 	const [coreValue, setCoreValue] = useDomino(core)
 
 	return (
@@ -42,8 +42,7 @@ export const ManualCleanup = () => {
 				value={coreValue}
 				onChange={(evt) => setCoreValue(evt.target.value)}
 			/>
-			<button onClick={() => setVisible(!visible)}>{buttonText}</button>
-			{visible && <DisplayValue />}
+			<DisplayValue />
 		</Fragment>
 	)
 }

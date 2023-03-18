@@ -396,4 +396,13 @@ describe('domino', () => {
 		utils.refresh()
 		expect(utils.get()).toBe(2)
 	})
+
+	it('should call onDelete on refresh', () => {
+		const store = new Store()
+		const onDelete = jest.fn()
+
+		const sut = domino<string, undefined>(() => 'test', { onDelete })
+		sut(store).refresh()
+		expect(onDelete).toBeCalledTimes(1)
+	})
 })
