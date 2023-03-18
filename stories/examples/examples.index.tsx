@@ -29,8 +29,3 @@ ChatServer.parameters = {
 		},
 	},
 }
-
-export default {
-	NPMRegistry,
-}
-

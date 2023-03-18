@@ -362,4 +362,38 @@ describe('domino', () => {
 		sut(store).delete()
 		sut(store).unsubscribe(subscription)
 	})
+
+	it('should allow refresh', () => {
+		const store = new Store()
+		const getValue = jest.fn().mockReturnValue('test')
+
+		const sut = domino(getValue)
+		const utils = sut(store)
+		utils.get()
+		expect(getValue).toBeCalledTimes(1)
+
+		utils.refresh()
+		expect(getValue).toBeCalledTimes(2)
+	})
+
+	it('should drop cache on refresh', () => {
+		const store = new Store()
+		const getValue = jest.fn()
+
+		const sut = domino<number, undefined>(({ cache }) => {
+			if (cache.has('value')) {
+				return cache.get('value')!
+			}
+			cache.set('value', getValue())
+			return cache.get('value')!
+		})
+		getValue.mockReturnValue(1)
+		const utils = sut(store)
+		expect(utils.get()).toBe(1)
+		getValue.mockReturnValue(2)
+		expect(utils.get()).toBe(1)
+
+		utils.refresh()
+		expect(utils.get()).toBe(2)
+	})
 })

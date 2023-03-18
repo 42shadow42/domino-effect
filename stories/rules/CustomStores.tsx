@@ -16,7 +16,7 @@ const derivative = domino(({ get }) => {
 const storeContext = createContext(createStore('Custom Store')[0])
 
 export const DefaultStore = () => {
-	const value = useDomino(derivative)
+	const [value] = useDomino(derivative)
 	const [coreValue, setCoreValue] = useDomino(core)
 	return (
 		<Fragment>
@@ -33,7 +33,7 @@ export const DefaultStore = () => {
 
 export const CustomStore = () => {
 	const store = useContext(storeContext)
-	const value = useDomino(derivative, { store })
+	const [value] = useDomino(derivative, { store })
 	const [coreValue, setCoreValue] = useDomino(core, { store })
 	return (
 		<Fragment>
@@ -52,7 +52,7 @@ const LocalStoreContext = createContext(GLOBAL_STORE)
 
 export const LocalStore = () => {
 	const store = useContext(LocalStoreContext)
-	const value = useDomino(derivative, { store })
+	const [value] = useDomino(derivative, { store })
 	const [coreValue, setCoreValue] = useDomino(core, { store })
 	return (
 		<Fragment>

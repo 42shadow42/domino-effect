@@ -12,7 +12,7 @@ const derivative = domino(async ({ get }) => {
 })
 
 export const AsynchronousComponent = () => {
-	const derivativeValue = useAsyncDomino(derivative)
+	const [derivativeValue] = useAsyncDomino(derivative)
 	const [coreValue, setCoreValue] = useAsyncDomino(core)
 	return (
 		<Fragment>

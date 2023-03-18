@@ -1,10 +1,6 @@
 import { Fragment, Suspense } from 'react'
 import { action } from '@storybook/addon-actions'
-import {
-	domino,
-	trigger,
-	useAsyncDomino,
-} from '@42shadow42/domino-effect'
+import { domino, trigger, useAsyncDomino } from '@42shadow42/domino-effect'
 
 const core = trigger(async () => ({
 	greeting: 'Hello',
@@ -43,13 +39,13 @@ const target = domino(async ({ get }) => {
 })
 
 const GreetingDisplay = () => {
-	const value = useAsyncDomino(greeting)
+	const [value] = useAsyncDomino(greeting)
 	action('greeting rendered')(value)
 	return <Fragment>{value}</Fragment>
 }
 
 const TargetDisplay = () => {
-	const value = useAsyncDomino(target)
+	const [value] = useAsyncDomino(target)
 	action('target rendered')(value)
 	return <Fragment>{value}</Fragment>
 }

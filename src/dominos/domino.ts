@@ -33,16 +33,16 @@ export const domino = <TValue, TContext extends Context = undefined>(
 
 		let _dependencies = new Set<CoreDomino<any, any>>()
 
-		const subscription = () => {
+		const refresh = () => {
 			new Set(_dependencies).forEach((dependency) =>
-				dependency(store).unsubscribe(subscription),
+				dependency(store).unsubscribe(refresh),
 			)
 			_dependencies = new Set<TriggerDomino<any, any>>()
 			// Users may interact with the cache during calculation so...
 			// Don't listen to subscriptions during calculation.
-			cache.unsubscribe(subscription)
+			cache.unsubscribe(refresh)
 			store.get(storeKey)?.[1]?.set(calculation(utils, context))
-			cache.subscribe(subscription)
+			cache.subscribe(refresh)
 		}
 
 		const utils = {
@@ -52,7 +52,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 			) => {
 				const domino = source(store, context)
 				_dependencies.add(source)
-				domino.subscribe(subscription)
+				domino.subscribe(refresh)
 				return domino.get()
 			},
 			manage: <TValue, TContext extends Context>(
@@ -61,7 +61,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 			) => {
 				const handle = trigger(store, context)
 				_dependencies.add(trigger)
-				handle.subscribe(subscription)
+				handle.subscribe(refresh)
 				return {
 					value: handle.get(),
 					set: handle.set,
@@ -90,14 +90,21 @@ export const domino = <TValue, TContext extends Context = undefined>(
 			},
 			delete: () => {
 				new Set(_dependencies).forEach((dependency) =>
-					dependency(store).unsubscribe(subscription),
+					dependency(store).unsubscribe(refresh),
 				)
 
 				onDelete?.({ cache })
-				cache.unsubscribe(subscription)
+				cache.unsubscribe(refresh)
 				cache.clear()
 
 				return store.delete(storeKey)
+			},
+			refresh: () => {
+				// We are explicitly triggering a refresh with an empty cache here
+				// Don't listen to subscriptions during cache.clear() we will run the refresh manually
+				cache.unsubscribe(refresh)
+				cache.clear()
+				refresh()
 			},
 			debugLabel,
 		}
@@ -106,7 +113,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 			dominoUtils,
 			new ObservableValue(calculation(utils, context)),
 		])
-		cache.subscribe(subscription)
+		cache.subscribe(refresh)
 
 		return store.get(storeKey)![0]
 	}, metadata)

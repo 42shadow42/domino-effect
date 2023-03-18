@@ -25,7 +25,7 @@ const sensitive = domino(
 )
 
 const DisplayValue = () => {
-	const sensitiveValue = useDomino(sensitive)
+	const [sensitiveValue] = useDomino(sensitive)
 	return <h4>{sensitiveValue}</h4>
 }
 

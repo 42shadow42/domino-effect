@@ -17,12 +17,14 @@ export type SubscribeDominoValue<TValue> = (
 export type UnsubscribeDominoValue<TValue> = (
 	subscriber: ObservableValueSubscriber<TValue>,
 ) => void
+export type RefreshDominoValue = () => void
 
 export type DominoUtils<TValue, TContext extends Context> = {
 	get: GetDominoValue<TValue, TContext>
 	subscribe: SubscribeDominoValue<TValue>
 	unsubscribe: UnsubscribeDominoValue<TValue>
 	delete: DeleteDominoValue
+	refresh: RefreshDominoValue
 	debugLabel?: string
 }
 

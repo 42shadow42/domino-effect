@@ -171,9 +171,9 @@ type ChatWindowProps = {
 }
 
 const ChatWindow = ({ roomId, onClose }: ChatWindowProps) => {
-	const messages = useDomino(chatMessages, { context: roomId })
-	const users = useDomino(chatUsers, { context: roomId })
-	const send = useDomino(socketSend, { context: roomId })
+	const [messages] = useDomino(chatMessages, { context: roomId })
+	const [users] = useDomino(chatUsers, { context: roomId })
+	const [send] = useDomino(socketSend, { context: roomId })
 	const [toSend, setToSend] = useState('How are you today?')
 	return (
 		<Fragment>

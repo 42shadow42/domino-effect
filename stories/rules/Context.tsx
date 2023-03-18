@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react'
 import { trigger, useDomino } from '@42shadow42/domino-effect'
 
 const core = trigger((context: string | undefined) => {
-	console.log('initializing')
 	return context || 'Hello'
 })
 
