@@ -11,6 +11,15 @@ module.exports = {
       ...config.resolve.alias,
       "@42shadow42/domino-effect": path.resolve(__dirname, "../src")
     };
+    config.module.rules = [
+      ...config.module.rules.map((rule) => {
+        return rule.test?.test('.tsx') ?
+          {
+            ...rule,
+            resourceQuery: { not: [/raw/] },
+          } : rule
+      }),
+    ]
     return config;
   },
   docs: {
