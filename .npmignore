@@ -1,4 +1,5 @@
 .github
+.husky
 .storybook
 .vscode
 coverage
@@ -14,6 +15,7 @@ server
 stories
 storybook-static
 test-results
+.eslintignore
 .eslintrc
 .DS_Store
 .gitignore

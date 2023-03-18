@@ -1,6 +1,6 @@
 import { Trigger as TriggerComponent } from './Trigger'
 // @ts-ignore
-import TriggerSource from '!!raw-loader!./Trigger'
+import TriggerSource from './Trigger?raw'
 
 export const Trigger = TriggerComponent.bind({})
 // @ts-ignore
@@ -15,7 +15,7 @@ Trigger.parameters = {
 
 import { Domino as DominoComponent } from './Domino'
 // @ts-ignore
-import DominoSource from '!!raw-loader!./Domino'
+import DominoSource from './Domino?raw'
 
 export const Domino = DominoComponent.bind({})
 // @ts-ignore
@@ -30,7 +30,7 @@ Domino.parameters = {
 
 import { MultipleDominos as MultipleDominosComponent } from './MultipleDominos'
 // @ts-ignore
-import MultipleDominosSource from '!!raw-loader!./MultipleDominos'
+import MultipleDominosSource from './MultipleDominos?raw'
 
 export const MultipleDominos = MultipleDominosComponent.bind({})
 // @ts-ignore
@@ -45,7 +45,7 @@ MultipleDominos.parameters = {
 
 import { SplittingDominos as SplittingDominosComponent } from './SplittingDominos'
 // @ts-ignore
-import SplittingDominosSource from '!!raw-loader!./SplittingDominos'
+import SplittingDominosSource from './SplittingDominos?raw'
 
 export const SplittingDominos = SplittingDominosComponent.bind({})
 // @ts-ignore
@@ -60,7 +60,7 @@ SplittingDominos.parameters = {
 
 import { SplittingAsyncDominos as SplittingAsyncDominosComponent } from './SplittingAsyncDominos'
 // @ts-ignore
-import SplittingAsyncDominosSource from '!!raw-loader!./SplittingAsyncDominos'
+import SplittingAsyncDominosSource from './SplittingAsyncDominos?raw'
 
 export const SplittingAsyncDominos = SplittingAsyncDominosComponent.bind({})
 // @ts-ignore
@@ -75,7 +75,7 @@ SplittingAsyncDominos.parameters = {
 
 import { Caching as CachingComponent } from './Caching'
 // @ts-ignore
-import CachingSource from '!!raw-loader!./Caching'
+import CachingSource from './Caching?raw'
 
 export const Caching = CachingComponent.bind({})
 // @ts-ignore
@@ -90,7 +90,7 @@ Caching.parameters = {
 
 import { Context as ContextComponent } from './Context'
 // @ts-ignore
-import ContextSource from '!!raw-loader!./Context'
+import ContextSource from './Context?raw'
 
 export const Context = ContextComponent.bind({})
 // @ts-ignore
@@ -105,7 +105,7 @@ Context.parameters = {
 
 import { CustomStores as CustomStoresComponent } from './CustomStores'
 // @ts-ignore
-import CustomStoresSource from '!!raw-loader!./CustomStores'
+import CustomStoresSource from './CustomStores?raw'
 
 export const CustomStores = CustomStoresComponent.bind({})
 // @ts-ignore
@@ -120,7 +120,7 @@ CustomStores.parameters = {
 
 import { ManualCleanup as ManualCleanupComponent } from './ManualCleanup'
 // @ts-ignore
-import ManualCleanupSource from '!!raw-loader!./ManualCleanup'
+import ManualCleanupSource from './ManualCleanup?raw'
 
 export const ManualCleanup = ManualCleanupComponent.bind({})
 // @ts-ignore
