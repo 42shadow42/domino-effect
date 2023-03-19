@@ -68,4 +68,21 @@ describe('mockDomino', () => {
 
 		expect(mock.delete).toBeCalledWith(expect.any(Store), 'context')
 	})
+
+	it('should mock refresh', () => {
+		const Component = () => {
+			const utils = useManagedDomino(derivative, { context: 'context' })
+
+			useEffect(() => {
+				utils.refresh()
+			}, [])
+
+			return <Fragment>{utils.get()}</Fragment>
+		}
+
+		render(<Component />)
+		cleanup()
+
+		expect(mock.refresh).toBeCalledWith(expect.any(Store), 'context')
+	})
 })
