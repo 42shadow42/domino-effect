@@ -26,7 +26,7 @@ describe('mockDomino', () => {
 	it('should mock get', () => {
 		mock.get.mockReturnValue('testing')
 		const { container } = render(<Component />)
-        
+
 		expect(container).toMatchSnapshot()
 		expect(mock.get).toBeCalledWith(expect.any(Store), 'context')
 	})

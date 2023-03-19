@@ -12,6 +12,7 @@ export type MockDominoMetadata = {
 	subscribe: jest.Mock
 	unsubscribe: jest.Mock
 	get: jest.Mock
+	refresh: jest.Mock
 }
 
 export type MockCoreDomino<TValue, TContext extends Context> = CoreDomino<
@@ -28,12 +29,14 @@ export const mockDomino = <TValue, TContext extends Context>(): MockCoreDomino<
 	const subscribeFn = jest.fn()
 	const unsubscribeFn = jest.fn()
 	const getFn = jest.fn()
+	const refreshFn = jest.fn()
 	const metadata: DominoMetadata & MockDominoMetadata = {
 		type: 'standard',
 		delete: deleteFn,
 		subscribe: subscribeFn,
 		unsubscribe: unsubscribeFn,
 		get: getFn,
+		refresh: refreshFn,
 	}
 	return Object.assign(
 		(store: Store, context?: TContext): DominoUtils<TValue, TContext> => {
@@ -44,6 +47,7 @@ export const mockDomino = <TValue, TContext extends Context>(): MockCoreDomino<
 				unsubscribe: (callback: ObservableValueSubscriber<TValue>) =>
 					unsubscribeFn(store, context, callback),
 				get: () => getFn(store, context),
+				refresh: () => refreshFn(store, context),
 			}
 		},
 		metadata,
