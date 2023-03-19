@@ -30,6 +30,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 		}
 
 		const cache = new ObservableCache<any, any>(settings.ttl || 0)
+		let currentHandle: symbol
 
 		let _dependencies = new Set<CoreDomino<any, any>>()
 
@@ -41,34 +42,43 @@ export const domino = <TValue, TContext extends Context = undefined>(
 			// Users may interact with the cache during calculation so...
 			// Don't listen to subscriptions during calculation.
 			cache.unsubscribe(refresh)
-			store.get(storeKey)?.[1]?.set(calculation(utils, context))
+			store.get(storeKey)?.[1]?.set(calculation(createUtils(), context))
 			cache.subscribe(refresh)
 		}
 
-		const utils = {
-			get: <TValue, TContext extends Context>(
-				source: CoreDomino<TValue, TContext>,
-				context?: TContext,
-			) => {
-				const domino = source(store, context)
-				_dependencies.add(source)
-				domino.subscribe(refresh)
-				return domino.get()
-			},
-			manage: <TValue, TContext extends Context>(
-				trigger: TriggerDomino<TValue, TContext>,
-				context?: TContext,
-			) => {
-				const handle = trigger(store, context)
-				_dependencies.add(trigger)
-				handle.subscribe(refresh)
-				return {
-					value: handle.get(),
-					set: handle.set,
-				}
-			},
-			context,
-			cache,
+		const createUtils = () => {
+			const handle = Symbol()
+			currentHandle = handle
+			return {
+				get: <TValue, TContext extends Context>(
+					source: CoreDomino<TValue, TContext>,
+					context?: TContext,
+				) => {
+					const domino = source(store, context)
+					if (handle === currentHandle) {
+						_dependencies.add(source)
+						domino.subscribe(refresh)
+					}
+
+					return domino.get()
+				},
+				manage: <TValue, TContext extends Context>(
+					trigger: TriggerDomino<TValue, TContext>,
+					context?: TContext,
+				) => {
+					const triggerHandle = trigger(store, context)
+					if (handle === currentHandle) {
+						_dependencies.add(trigger)
+						triggerHandle.subscribe(refresh)
+					}
+					return {
+						value: triggerHandle.get(),
+						set: triggerHandle.set,
+					}
+				},
+				context,
+				cache,
+			}
 		}
 
 		let gcTimeout: NodeJS.Timeout
@@ -112,7 +122,7 @@ export const domino = <TValue, TContext extends Context = undefined>(
 
 		store.set(storeKey, [
 			dominoUtils,
-			new ObservableValue(calculation(utils, context)),
+			new ObservableValue(calculation(createUtils(), context)),
 		])
 		cache.subscribe(refresh)
 
