@@ -13,6 +13,7 @@ export type MockTriggerMetadata = {
 	unsubscribe: jest.Mock
 	get: jest.Mock
 	set: jest.Mock
+	refresh: jest.Mock
 }
 
 export type MockTriggerDomino<TValue, TContext extends Context> = TriggerDomino<
@@ -30,6 +31,7 @@ export const mockTrigger = <
 	const unsubscribeFn = jest.fn()
 	const getFn = jest.fn()
 	const setFn = jest.fn()
+	const refreshFn = jest.fn()
 	const metadata: DominoMetadata & MockTriggerMetadata = {
 		type: 'trigger',
 		delete: deleteFn,
@@ -37,6 +39,7 @@ export const mockTrigger = <
 		unsubscribe: unsubscribeFn,
 		get: getFn,
 		set: setFn,
+		refresh: refreshFn,
 	}
 	return Object.assign(
 		(
@@ -51,6 +54,7 @@ export const mockTrigger = <
 					unsubscribeFn(store, context, callback),
 				get: () => getFn(store, context),
 				set: (value: TValue) => setFn(store, context, value),
+				refresh: () => refreshFn(store, context),
 			}
 		},
 		metadata,

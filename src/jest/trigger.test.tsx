@@ -26,7 +26,7 @@ describe('mockDomino', () => {
 	it('should mock get', () => {
 		mock.get.mockReturnValue('testing')
 		const { container } = render(<Component />)
-        
+
 		expect(container).toMatchSnapshot()
 		expect(mock.get).toBeCalledWith(expect.any(Store), 'context')
 	})
@@ -84,5 +84,22 @@ describe('mockDomino', () => {
 		cleanup()
 
 		expect(mock.delete).toBeCalledWith(expect.any(Store), 'context')
+	})
+
+	it('should mock delete', () => {
+		const Component = () => {
+			const utils = useManagedDomino(core, { context: 'context' })
+
+			useEffect(() => {
+				utils.refresh()
+			}, [])
+
+			return <Fragment>{utils.get()}</Fragment>
+		}
+
+		render(<Component />)
+		cleanup()
+
+		expect(mock.refresh).toBeCalledWith(expect.any(Store), 'context')
 	})
 })

@@ -9,6 +9,7 @@ describe('store', () => {
 			set: jest.fn(),
 			subscribe: jest.fn(),
 			unsubscribe: jest.fn(),
+			refresh: jest.fn(),
 		},
 		new ObservableValue<any>('N/A'),
 	]

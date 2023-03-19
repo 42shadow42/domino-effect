@@ -8,25 +8,29 @@ test.describe('Multiple Dominos', () => {
 		await expect(page).toHaveTitle(/Domino \/ Rules - Multiple Dominos/i)
 	})
 
-    test('can edit trigger value', async ({ page }) => {
-        await page.goto('?path=/story/domino-rules--multiple-dominos')
-        const story = page.frameLocator('iframe[title="storybook-preview-iframe"]')
+	test('can edit trigger value', async ({ page }) => {
+		await page.goto('?path=/story/domino-rules--multiple-dominos')
+		const story = page.frameLocator(
+			'iframe[title="storybook-preview-iframe"]',
+		)
 
-        const input = story.getByRole('textbox', { name: /trigger/i })
-        await input.fill('Playwright testing')
+		const input = story.getByRole('textbox', { name: /trigger/i })
+		await input.fill('Playwright testing')
 
-        expect(await input.inputValue()).toBe('Playwright testing')
-    })
+		expect(await input.inputValue()).toBe('Playwright testing')
+	})
 
-    test('can view domino value', async ({ page }) => {
-        await page.goto('?path=/story/domino-rules--multiple-dominos')
-        const story = page.frameLocator('iframe[title="storybook-preview-iframe"]')
+	test('can view domino value', async ({ page }) => {
+		await page.goto('?path=/story/domino-rules--multiple-dominos')
+		const story = page.frameLocator(
+			'iframe[title="storybook-preview-iframe"]',
+		)
 
-        const input = story.getByRole('textbox', { name: /trigger/i })
-        await input.fill('Playwright testing')
+		const input = story.getByRole('textbox', { name: /trigger/i })
+		await input.fill('Playwright testing')
 
-        const text = story.getByRole('heading', { name: /domino/i })
+		const text = story.getByRole('heading', { name: /domino/i })
 
-        expect(await text.textContent()).toBe('Playwright testing world!')
-    })
+		expect(await text.textContent()).toBe('Playwright testing world!')
+	})
 })

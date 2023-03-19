@@ -6,7 +6,8 @@ export type ObservableValueSubscriber<TValue> = (value: TValue) => void
 export class ObservableValue<TValue> {
 	private _value: TValue
 	private _subscribers = new Set<ObservableValueSubscriber<TValue>>()
-	private _nextValue: TValue | undefined
+	private _latestPromise: TValue | undefined
+	private _latestResolvedValue: any
 
 	constructor(value: TValue) {
 		this._value = value
@@ -29,11 +30,14 @@ export class ObservableValue<TValue> {
 		}
 
 		if (isPromise(value) && isPromise(this._value)) {
-			this._nextValue = value
-			const values = Promise.all([this._value, value])
-			values.then(([oldValue, newValue]) => {
-				if (this._nextValue === value && !isEqual(oldValue, newValue)) {
+			this._latestPromise = value
+			value.then((resolvedValue) => {
+				if (
+					this._latestPromise === value &&
+					!isEqual(this._latestResolvedValue, resolvedValue)
+				) {
 					this._value = value
+					this._latestResolvedValue = resolvedValue
 					new Set(this._subscribers).forEach((subscriber) =>
 						subscriber(value),
 					)

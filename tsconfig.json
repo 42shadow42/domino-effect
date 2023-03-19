@@ -24,6 +24,6 @@
       "@42shadow42/domino-effect": ["src"],
     },
   },
-  "include": ["src/**/*", "stories/**/*"],
+  "include": ["src/**/*", "stories/**/*", "playwright/**/*"],
   "exclude": ["node_modules", "lib"],
 }

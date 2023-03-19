@@ -362,4 +362,119 @@ describe('domino', () => {
 		sut(store).delete()
 		sut(store).unsubscribe(subscription)
 	})
+
+	it('should allow refresh', () => {
+		const store = new Store()
+		const getValue = jest.fn().mockReturnValue('test')
+
+		const sut = domino(getValue)
+		const utils = sut(store)
+		utils.get()
+		expect(getValue).toBeCalledTimes(1)
+
+		utils.refresh()
+		expect(getValue).toBeCalledTimes(2)
+	})
+
+	it('should drop cache on refresh', () => {
+		const store = new Store()
+		const getValue = jest.fn()
+
+		const sut = domino<number, undefined>(({ cache }) => {
+			if (cache.has('value')) {
+				return cache.get('value')!
+			}
+			cache.set('value', getValue())
+			return cache.get('value')!
+		})
+		getValue.mockReturnValue(1)
+		const utils = sut(store)
+		expect(utils.get()).toBe(1)
+		getValue.mockReturnValue(2)
+		expect(utils.get()).toBe(1)
+
+		utils.refresh()
+		expect(utils.get()).toBe(2)
+	})
+
+	it('should call onDelete on refresh', () => {
+		const store = new Store()
+		const onDelete = jest.fn()
+
+		const sut = domino<string, undefined>(() => 'test', { onDelete })
+		sut(store).refresh()
+		expect(onDelete).toBeCalledTimes(1)
+	})
+
+	it('should resolve even if prior values hang', async () => {
+		jest.useRealTimers()
+		const store = new Store()
+		const calcCheck = jest.fn()
+
+		// This promise should never resolve
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		const corePromise = trigger(() => new Promise<string>(() => {}))
+		const sut = domino(async ({ get }) => {
+			calcCheck()
+			return await get(corePromise)
+		})
+
+		sut(store).get()
+
+		corePromise(store).set(Promise.resolve('resolved'))
+		await new Promise(process.nextTick)
+		const result = await sut(store).get()
+		expect(calcCheck).toBeCalledTimes(2)
+		expect(result).toBe('resolved')
+	})
+
+	it('should not subscribe when outdated', async () => {
+		jest.useRealTimers()
+		const store = new Store()
+		const calcCheck = jest.fn()
+		let firstResolver: (result: boolean) => void
+		let secondResolver: (result: boolean) => void
+
+		const corePromise = trigger(
+			() =>
+				new Promise<boolean>((resolve) => {
+					firstResolver = resolve
+				}),
+		)
+		const core = trigger(() => 'subscribed')
+		const sut = domino(async ({ get }) => {
+			calcCheck()
+			const shouldSubscribe = await get(corePromise)
+			if (shouldSubscribe) {
+				return get(core)
+			}
+			return 'unsubscribed'
+		})
+
+		const firstResultPromise = sut(store).get()
+		corePromise(store).set(
+			new Promise<boolean>((resolve) => {
+				secondResolver = resolve
+			}),
+		)
+
+		// Must resolve first because recalculating doens't occur until the promise resolves
+		// secondResolver will always be set
+		// @ts-ignore
+		secondResolver(false)
+		await new Promise(process.nextTick)
+		const secondResultPromise = sut(store).get()
+		expect(calcCheck).toBeCalledTimes(2)
+		expect(await secondResultPromise).toBe('unsubscribed')
+		// firstRsolver will always be set
+		// @ts-ignore
+		firstResolver(true)
+		expect(await firstResultPromise).toBe('subscribed')
+
+		expect(calcCheck).toBeCalledTimes(2)
+
+		core(store).set('testing')
+
+		expect(calcCheck).toBeCalledTimes(2)
+	})
 })

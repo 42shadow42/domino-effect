@@ -56,6 +56,9 @@ export const trigger = <TValue, TContext extends Context = undefined>(
 				delete: () => {
 					return store.delete(storeKey)
 				},
+				refresh: () => {
+					store.get(storeKey)![1].set(factory(context))
+				},
 				debugLabel,
 			},
 			metadata,

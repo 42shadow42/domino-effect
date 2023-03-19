@@ -1,5 +1,29 @@
 # Domino Effect Changes
 
+## v0.4.0
+
+### Breaking Changes
+In order to support refreshing of Dominos it was necessary to change the return format from useDomino and useAsyncDomino to return a tuple instead of the raw value. This has no visual impact when the value is just used as a react node and rendered, but will cause a console error to be reported because of the refresh callback. It will absolutely cause errors when trying to use the value in the body of the react component.
+
+### Additional Features
+This release brings the ability to refresh Dominos. With regards of the onDelete callback, refreshing Dominos are treated as deleted. This is to ensure cleanup possibilities for soon to be orphaned resources. The difference is the value is automatically recalculated and subscribers are notified of the new value.
+
+## v0.3.2
+
+### Minor Changes
+
+Updated documentation
+
+Fixed bug where context was not forwarded correctly in all places
+
+Fixed limitation where domino values could not be functions
+
+## v0.3.1
+
+### Minor Changes
+
+Optimized bundle size!
+
 ## v0.3.0
 
 ### Breaking Changes

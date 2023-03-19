@@ -153,4 +153,17 @@ describe('trigger', () => {
 		sut(store).delete()
 		sut(store).unsubscribe(subscription)
 	})
+
+	it('should allow refresh', () => {
+		const store = new Store()
+		const getValue = jest.fn().mockReturnValue('test')
+
+		const sut = trigger(getValue)
+		const utils = sut(store)
+		utils.get()
+		expect(getValue).toBeCalledTimes(1)
+
+		utils.refresh()
+		expect(getValue).toBeCalledTimes(2)
+	})
 })

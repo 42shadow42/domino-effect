@@ -116,7 +116,7 @@ type ResultsEditorProps = {
 }
 
 const ResultsEditor = ({ value }: ResultsEditorProps) => {
-	const [pack, setPack, reset] = useAsyncDomino(packageEditor, {
+	const [[pack, setPack, reset]] = useAsyncDomino(packageEditor, {
 		context: value.name,
 	})
 	return (
@@ -140,7 +140,7 @@ type SearchResultsProps = {
 }
 
 const SearchResults = ({ onSelectPackage }: SearchResultsProps) => {
-	const value = useAsyncDomino(results)
+	const [value] = useAsyncDomino(results)
 	return (
 		<ol style={{ float: 'left', clear: 'left' }}>
 			{value.objects.map((object) => (
@@ -155,7 +155,7 @@ const SearchResults = ({ onSelectPackage }: SearchResultsProps) => {
 	)
 }
 
-class ErrorBoundary extends Component<PropsWithChildren<{}>> {
+class ErrorBoundary extends Component<PropsWithChildren> {
 	state: { error?: Error } = {}
 	static getDerivedStateFromError(error: Error) {
 		return { error: error }

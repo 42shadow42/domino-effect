@@ -132,3 +132,18 @@ ManualCleanup.parameters = {
 		},
 	},
 }
+
+import { Refresh as RefreshComponent } from './Refresh'
+// @ts-ignore
+import RefreshSource from './Refresh?raw'
+
+export const Refresh = RefreshComponent.bind({})
+// @ts-ignore
+Refresh.parameters = {
+	docs: {
+		source: {
+			code: RefreshSource,
+			language: 'tsx',
+		},
+	},
+}

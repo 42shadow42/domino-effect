@@ -101,4 +101,14 @@ describe('value', () => {
 
 		expect(subscriber).toBeCalledTimes(0)
 	})
+
+	it('should resolve even if prior values hang', async () => {
+		jest.useRealTimers()
+		// This promise should never resolve
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		const sut = new ObservableValue(new Promise<string>(() => {}))
+		sut.set(Promise.resolve('value'))
+		await new Promise(process.nextTick)
+		await sut.get()
+	})
 })

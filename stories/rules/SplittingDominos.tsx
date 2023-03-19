@@ -16,13 +16,13 @@ const target = domino(({ get }) => {
 })
 
 const GreetingDisplay = memo(() => {
-	const value = useDomino(greeting)
+	const [value] = useDomino(greeting)
 	action('greeting rendered')(value)
 	return <Fragment>{value}</Fragment>
 })
 
 const TargetDisplay = memo(() => {
-	const value = useDomino(target)
+	const [value] = useDomino(target)
 	action('target rendered')(value)
 	return <Fragment>{value}</Fragment>
 })

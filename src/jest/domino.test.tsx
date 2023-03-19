@@ -15,7 +15,7 @@ jest.mock('./__utils__/dominos', () => require('./__mocks__/dominos'))
 
 describe('mockDomino', () => {
 	const Component = () => {
-		const value = useDomino(derivative, { context: 'context' })
+		const [value] = useDomino(derivative, { context: 'context' })
 		return <Fragment>{value}</Fragment>
 	}
 
@@ -33,7 +33,7 @@ describe('mockDomino', () => {
 
 	it('should mock subscribe', () => {
 		render(<Component />)
-        
+
 		expect(mock.subscribe).toBeCalledWith(
 			expect.any(Store),
 			'context',
@@ -67,5 +67,22 @@ describe('mockDomino', () => {
 		cleanup()
 
 		expect(mock.delete).toBeCalledWith(expect.any(Store), 'context')
+	})
+
+	it('should mock refresh', () => {
+		const Component = () => {
+			const utils = useManagedDomino(derivative, { context: 'context' })
+
+			useEffect(() => {
+				utils.refresh()
+			}, [])
+
+			return <Fragment>{utils.get()}</Fragment>
+		}
+
+		render(<Component />)
+		cleanup()
+
+		expect(mock.refresh).toBeCalledWith(expect.any(Store), 'context')
 	})
 })
