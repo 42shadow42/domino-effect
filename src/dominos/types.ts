@@ -6,9 +6,7 @@ export type Context = string | boolean | number | undefined
 export type DominoType = 'standard' | 'trigger'
 export type DominoMetadata = { type: DominoType }
 
-export type GetDominoValue<TValue, TContext extends Context> = (
-	context?: TContext,
-) => TValue
+export type GetDominoValue<TValue> = () => TValue
 export type SetDominoValue<TValue> = (value: TValue) => void
 export type DeleteDominoValue = () => void
 export type SubscribeDominoValue<TValue> = (
@@ -19,8 +17,8 @@ export type UnsubscribeDominoValue<TValue> = (
 ) => void
 export type RefreshDominoValue = () => void
 
-export type DominoUtils<TValue, TContext extends Context> = {
-	get: GetDominoValue<TValue, TContext>
+export type DominoUtils<TValue> = {
+	get: GetDominoValue<TValue>
 	subscribe: SubscribeDominoValue<TValue>
 	unsubscribe: UnsubscribeDominoValue<TValue>
 	delete: DeleteDominoValue
@@ -28,22 +26,19 @@ export type DominoUtils<TValue, TContext extends Context> = {
 	debugLabel?: string
 }
 
-export type TriggerDominoUtils<TValue, TContext extends Context> = DominoUtils<
-	TValue,
-	TContext
-> & {
+export type TriggerDominoUtils<TValue> = DominoUtils<TValue> & {
 	set: SetDominoValue<TValue>
 }
 
 export type CoreDomino<TValue, TContext extends Context> = ((
 	store: Store,
 	context?: TContext,
-) => DominoUtils<TValue, TContext>) &
+) => DominoUtils<TValue>) &
 	DominoMetadata
 export type TriggerDomino<TValue, TContext extends Context> = ((
 	store: Store,
 	context?: TContext,
-) => TriggerDominoUtils<TValue, TContext>) &
+) => TriggerDominoUtils<TValue>) &
 	DominoMetadata
 
 export const isTriggerDomino = <TValue, TContext extends Context>(

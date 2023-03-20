@@ -3,7 +3,7 @@ import { ObservableValue } from '../observables'
 
 export type StoreKey = [symbol, Context]
 export type StoredDomino = [
-	DominoUtils<any, any> | TriggerDominoUtils<any, any>,
+	DominoUtils<any> | TriggerDominoUtils<any>,
 	ObservableValue<any>,
 ]
 
