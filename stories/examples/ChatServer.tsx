@@ -1,10 +1,5 @@
 import { Fragment, Suspense, useState } from 'react'
-import {
-	domino,
-	trigger,
-	useAsyncDomino,
-	useDomino,
-} from '@42shadow42/domino-effect'
+import { domino, trigger, useDomino } from '@42shadow42/domino-effect'
 
 type ChatMessage = {
 	user: string
