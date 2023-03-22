@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rollup -c",
     "build-storybook": "storybook build",
-    "lint": "eslint",
+    "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "precommit": "npm run lint:fix && npm run pretty",
     "prepare": "husky install",
