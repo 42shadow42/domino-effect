@@ -8,7 +8,7 @@ To illustrate the distinction take the example of a making a purchase from an e-
 - REMOVE_FROM_CART
 - EMPTY_CART
 
-It seems simple really, until you start to consider the data derived from these modified data points. In the [shopping cart](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart) example from dedux. They make it sound simple by just implemented cart totals as a selector off the products, but in my experience the real world is not so simple. Here are a few real life examples that make this simplified example less ideal.
+It seems simple really, until you start to consider the data derived from these modified data points. In the [shopping cart](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/shopping-cart) example from redux. They make it sound simple by just implemented cart totals as a selector off the products, but in my experience the real world is not so simple. Here are a few real life examples that make this simplified example less ideal.
 
 1. The pricing of the product is variable based on location or requested quantity, and as a result it is calculated on the server.
 2. The shopping cart total has a variable tax based on location or user profile, as a result it is calculated on the server.
@@ -47,7 +47,7 @@ const derivative = domino(({ get }) => {
 })
 
 export const Domino = () => {
-	const value = useDomino(derivative)
+	const [value] = useDomino(derivative)
 	return <h4 aria-label="Domino">{value}</h4>
 }
 ```

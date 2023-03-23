@@ -1,6 +1,6 @@
 {
   "name": "@42shadow42/domino-effect",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Reactive state management framework",
   "main": "lib/cjs/index.js",
   "module": "lib/es/index.js",
@@ -9,12 +9,12 @@
   "scripts": {
     "build": "rollup -c",
     "build-storybook": "storybook build",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint --fix src/**/*.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "precommit": "npm run lint:fix && npm run pretty",
     "prepare": "husky install",
     "prepush": "npm run lint",
-    "pretty": "prettier --write 'src/**/*.ts'",
+    "pretty": "prettier --write '**/*.ts'",
     "start-server": "ts-node ./server/server.ts",
     "storybook": "storybook dev -p 6006",
     "test": "jest"

@@ -39,7 +39,7 @@ export const mockDomino = <TValue, TContext extends Context>(): MockCoreDomino<
 		refresh: refreshFn,
 	}
 	return Object.assign(
-		(store: Store, context?: TContext): DominoUtils<TValue, TContext> => {
+		(store: Store, context?: TContext): DominoUtils<TValue> => {
 			return {
 				delete: () => deleteFn(store, context),
 				subscribe: (callback: ObservableValueSubscriber<TValue>) =>

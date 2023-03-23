@@ -18,7 +18,7 @@ export type useDominoOptions<TContext> = {
 export function useDomino<TValue, TContext extends Context>(
 	domino: TriggerDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
-): [TValue, ReactSetDominoValue<TValue>]
+): [TValue, ReactSetDominoValue<TValue>, RefreshDominoValue]
 export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext>,
 	options?: useDominoOptions<TContext>,
@@ -26,7 +26,9 @@ export function useDomino<TValue, TContext extends Context>(
 export function useDomino<TValue, TContext extends Context>(
 	domino: CoreDomino<TValue, TContext> | TriggerDomino<TValue, TContext>,
 	options: useDominoOptions<TContext> = {},
-): [TValue, RefreshDominoValue] | [TValue, ReactSetDominoValue<TValue>] {
+):
+	| [TValue, RefreshDominoValue]
+	| [TValue, ReactSetDominoValue<TValue>, RefreshDominoValue] {
 	const { store = GLOBAL_STORE, context } = options
 	const dominoUtils = domino(store, context)
 	const [value, setValue] = useState(() => dominoUtils.get())
@@ -57,7 +59,7 @@ export function useDomino<TValue, TContext extends Context>(
 	)
 
 	if (isTriggerDomino(domino)) {
-		return [value, setDominoValue]
+		return [value, setDominoValue, dominoUtils.refresh]
 	}
 
 	return [value, dominoUtils.refresh]

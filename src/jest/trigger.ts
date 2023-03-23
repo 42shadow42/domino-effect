@@ -42,10 +42,7 @@ export const mockTrigger = <
 		refresh: refreshFn,
 	}
 	return Object.assign(
-		(
-			store: Store,
-			context?: TContext,
-		): TriggerDominoUtils<TValue, TContext> => {
+		(store: Store, context?: TContext): TriggerDominoUtils<TValue> => {
 			return {
 				delete: () => deleteFn(store, context),
 				subscribe: (callback: ObservableValueSubscriber<TValue>) =>

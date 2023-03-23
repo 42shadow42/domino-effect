@@ -22,14 +22,11 @@ export const trigger = <TValue, TContext extends Context = undefined>(
 
 		if (store.has(storeKey)) {
 			// Because the store key includes the handle we know its a trigger domino
-			return store.get(storeKey)![0] as TriggerDominoUtils<
-				TValue,
-				TContext
-			>
+			return store.get(storeKey)![0] as TriggerDominoUtils<TValue>
 		}
 
 		let gcTimeout: NodeJS.Timeout
-		const utils: TriggerDominoUtils<TValue, TContext> = Object.assign(
+		const utils: TriggerDominoUtils<TValue> = Object.assign(
 			{
 				get: () => {
 					return store.get(storeKey)![1].get()
@@ -67,6 +64,6 @@ export const trigger = <TValue, TContext extends Context = undefined>(
 		store.set(storeKey, [utils, new ObservableValue(factory(context))])
 
 		// Because the store key includes the handle we know its a trigger domino
-		return store.get(storeKey)![0] as TriggerDominoUtils<TValue, TContext>
+		return store.get(storeKey)![0] as TriggerDominoUtils<TValue>
 	}, metadata)
 }

@@ -4,9 +4,9 @@
 .vscode
 coverage
 lib/**/__utils__
-lib/**/*.test.ts
 lib/**/*.test.d.ts
-lib/stories
+lib/jest.config.d.ts
+lib/playwright.config.d.ts
 node_modules
 playwright
 playwright-report

@@ -1,10 +1,5 @@
 import { Fragment, Suspense } from 'react'
-import {
-	domino,
-	trigger,
-	useAsyncDomino,
-	useDomino,
-} from '@42shadow42/domino-effect'
+import { domino, trigger, useAsyncDomino } from '@42shadow42/domino-effect'
 
 const core = trigger(() => Promise.resolve('Hello'))
 const derivative = domino(async ({ get }) => {
