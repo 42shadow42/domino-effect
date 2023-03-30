@@ -1,0 +1,19 @@
+import { Meta, Story, Canvas } from '@storybook/blocks';
+import { ChatServer } from './ChatServer.stories'
+import { NPMRegistry } from './NPMRegistry.stories';
+
+<Meta title="Domino/Examples" />
+
+# Examples
+
+## NPM Registry
+
+<Canvas of={NPMRegistry} />
+
+## Chat Server
+
+The chat server depends on an underlying web service, and won't function in GH Pages at present.
+To see it working you can download the code and run the commands `npm run start-server` and `npm run storybook` in separate terminals.
+
+<Canvas of={ChatServer} />
+

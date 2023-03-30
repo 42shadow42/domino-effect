@@ -1,8 +1,16 @@
-import { Meta, Story, Source, Canvas } from '@storybook/addon-docs';
-import * as stories from './rules.index.tsx';
-import { Component } from 'react';
+import { Meta, Story, Canvas } from '@storybook/blocks';
+import { Caching } from './Caching.stories';
+import { Context } from './Context.stories';
+import { CustomStores } from './CustomStores.stories';
+import { Domino } from './Domino.stories';
+import { ManualCleanup } from './ManualCleanup.stories';
+import { MultipleDominos } from './MultipleDominos.stories';
+import { Refresh } from './Refresh.stories';
+import { SplittingAsyncDominos } from './SplittingAsyncDominos.stories';
+import { SplittingDominos } from './SplittingDominos.stories';
+import { Trigger } from './Trigger.stories';
 
-<Meta title="Domino/Rules" component={Component} />
+<Meta title="Domino/Rules" />
 
 # Rules of dominos
 
@@ -10,25 +18,19 @@ import { Component } from 'react';
 Triggers are the basic form of dominos they are read and write enabled. 
 When changed they will trigger a domino effect and will cascade changes to dependent domnions.
 
-<Canvas>
-    <Story story={stories.Trigger} />
-</Canvas>
+<Canvas of={Trigger} />
 
 ## Domino
 Dominos are derived from triggers, they exhibit the domino effect and will cascade changes to dependent dominos.
 
-<Canvas>
-    <Story story={stories.Domino} />
-</Canvas>
+<Canvas of={Domino} />
 
 
-## Multiple Dominons
+## Multiple Dominos
 Prior to react 18.3.0 it was necessary to limit domino usage to a single domino per component.
 Due to the release of the use hook in 18.3.0 this limitation has been lifted, and the rules required Splitting Components or Combining Dominos no longer apply.
 
-<Canvas>
-    <Story story={stories.MultipleDominos} />
-</Canvas>
+<Canvas of={MultipleDominos} />
 
 ## Select only what you need
 When dealing with complex objects dominos can cause excessive rendering. 
@@ -36,27 +38,21 @@ To resolve rendering problems you can split using basic dominos and memoize comp
 
 ### Splitting Dominos
 
-<Canvas>
-    <Story story={stories.SplittingDominos} />
-</Canvas>
+<Canvas of={SplittingDominos} />
 
 This works with async dominos too! 
 Just keep in mind async operations will still be performed if they depend directly on changed values.
 
 ### Splitting Async Dominos
 
-<Canvas>
-    <Story story={stories.SplittingAsyncDominos} />
-</Canvas>
+<Canvas of={SplittingAsyncDominos} />
 
 ## Caching in Dominos
 
 You can cache data in your dominos for expensive operations.
 Just keep in mind to expire data, that may get stale.
 
-<Canvas>
-    <Story story={stories.Caching} />
-</Canvas>
+<Canvas of={Caching} />
 
 ### Multiple values
 You can use a single domino for multiple values either by providing a context, or custom stores.
@@ -66,18 +62,14 @@ You can use a single domino for multiple values either by providing a context, o
 You can pass primitives to access contextual values.
 This allows you to use local state to pick an instance.
 
-<Canvas>
-    <Story story={stories.Context} />
-</Canvas>
+<Canvas of={Context} />
 
 ### Custom Stores for Dominos
 
 You can pass the stores via context to prevent prop drilling.
 To create a store local to your components use useLocalStore, to avoid memory leaks.
 
-<Canvas>
-    <Story story={stories.CustomStores} />
-</Canvas>
+<Canvas of={CustomStores} />
 
 ### Manual Cleanup
 
@@ -85,9 +77,7 @@ Sometimes you create resources that must be cleaned up manual such as web socket
 You can do that using the onDelete callback when configured a sensitive domino.
 Keep in mind the onDelete callback will never be called without a ttl configured as well.
 
-<Canvas>
-    <Story story={stories.ManualCleanup} />
-</Canvas>
+<Canvas of={ManualCleanup} />
 
 ### Refreshing
 
@@ -95,6 +85,4 @@ Sometimes you want to manually refresh dominos.
 For example maybe your domino is a counter that you'd like to reset.
 Or possibly your domino is a remote resource that has been modified and needs refreshed.
 
-<Canvas>
-    <Story story={stories.Refresh} />
-</Canvas>
+<Canvas of={Refresh} />
